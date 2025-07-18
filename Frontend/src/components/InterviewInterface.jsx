@@ -1,24 +1,22 @@
-// Converted from TypeScript to JSX - No TS types used
+
 import { useState } from 'react';
-import React from "react";
 import { Mic, MicOff, Play, Square, RotateCcw } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card } from './ui/card';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import axios from 'axios'
+
+
 
 export const InterviewInterface = () => {
-  const [isRecording, setIsRecording] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
   const [interviewStarted, setInterviewStarted] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+const [mediaRecorder, setMediaRecorder] = useState(null);
+const [audioChunks, setAudioChunks] = useState([]);
 
-  const questions = [
-    "Tell me about yourself and your background.",
-    "What are your greatest strengths and how do they apply to this role?",
-    "Describe a challenging situation you faced and how you overcame it.",
-    "Where do you see yourself in 5 years?",
-    "Why do you want to work for our company?"
-  ];
 
   const sampleFeedback = [
     {
@@ -44,40 +42,78 @@ export const InterviewInterface = () => {
     }
   ];
 
-  const handleStartInterview = () => {
+  const handleStartInterview = async () => {
+     try {
     setInterviewStarted(true);
     setCurrentQuestion(0);
     setShowFeedback(false);
     setUserAnswer('');
+    
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-questions`, {
+      jobTitle: "Frontend Developer",
+      skills: ["React", "JavaScript", "Tailwind"]
+    });
+
+    setQuestions(res.data.questions);
+  } catch (error) {
+    console.error("Failed to fetch questions", error);
+    alert("Something went wrong while fetching interview questions.");
+  }
+
   };
 
-  const handleRecordToggle = () => {
-    if (!isRecording) {
-      setIsRecording(true);
-      setTimeout(() => {
-        setIsRecording(false);
-        setUserAnswer("I'm a software engineer with 5 years of experience in full-stack development. I'm passionate about creating user-centric applications and have led several successful projects that improved user engagement by 40%. I'm particularly excited about this role because it combines my technical skills with my interest in AI and machine learning.");
-        setShowFeedback(true);
-      }, 3000);
-    } else {
+ const handleRecordToggle = async () => {
+  if (!isRecording) {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    console.log("Mic access granted");
+    const recorder = new MediaRecorder(stream);
+    const chunks = [];
+
+    recorder.ondataavailable = (e) => chunks.push(e.data);
+    recorder.onstop = async () => {
+      const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append("audio", audioBlob);
+
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/ai/transcribe-audio`, {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      setUserAnswer(data.transcript || "Could not transcribe audio.");
+      setShowFeedback(true);
+    };
+
+    recorder.start();
+    setIsRecording(true);
+    setMediaRecorder(recorder);
+    setAudioChunks(chunks);
+
+    setTimeout(() => {
+      recorder.stop();
       setIsRecording(false);
-    }
-  };
+    }, 30000);
+  } else {
+    mediaRecorder?.stop();
+    setIsRecording(false);
+  }
+};
 
   const handleNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setUserAnswer('');
-      setShowFeedback(false);
-    }
+    setCurrentQuestion(currentQuestion + 1);
+    setUserAnswer('');
+    setShowFeedback(false);
+  }
   };
 
   const getScoreColor = (color) => {
     switch (color) {
-      case 'success': return 'text-success';
-      case 'warning': return 'text-warning';
-      case 'destructive': return 'text-destructive';
-      default: return 'text-muted-foreground';
+      case 'success': return 'text-green-500';
+      case 'warning': return 'border-yellow-500';
+      case 'destructive': return 'text-red-500';
+      default: return ' text-gray-500';
     }
   };
 
@@ -89,25 +125,28 @@ export const InterviewInterface = () => {
     return (
       <div className="min-h-screen gradient-hero flex items-center justify-center p-6">
         <div className="w-full max-w-xl text-center space-y-8 animate-fade-in">
+          {/* Hero Section */}
           <div className="space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-400">
               Ace Your Next
-              <span className="block text-transparent bg-gradient-to-r from-primary-glow to-info bg-clip-text">
+              <span className="block text-transparent bg-gradient-to-r from-blue-200 to-blue-500 bg-clip-text">
                 Interview!
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
+            <p className="text-xl  text-gray-500 max-w-md mx-auto leading-relaxed">
               Practice with AI. Get smart feedback. Boost your confidence.
             </p>
           </div>
+
+          {/* Start Interview Button */}
           <Card className="glassmorphic p-8 card-glow animate-scale-in">
             <div className="space-y-6">
               <div className="w-20 h-20 mx-auto gradient-button rounded-full flex items-center justify-center shadow-lg">
                 <Mic className="w-8 h-8 text-primary-foreground" />
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">Ready to begin?</h3>
-                <p className="text-muted-foreground text-sm">
+                <h3 className="text-xl font-semibold text-gray-400">Ready to begin?</h3>
+                <p className=" text-gray-500 text-sm">
                   We'll ask you 5 questions and provide detailed feedback on your performance.
                 </p>
                 <Button 
@@ -129,28 +168,36 @@ export const InterviewInterface = () => {
   return (
     <div className="min-h-screen gradient-hero p-6">
       <div className="max-w-4xl mx-auto space-y-8 py-8">
+        {/* Progress Indicator */}
         <div className="text-center space-y-2 animate-fade-in">
-          <p className="text-muted-foreground text-sm">
+          <p className=" text-gray-500 text-sm">
             Question {currentQuestion + 1} of {questions.length}
           </p>
-          <div className="w-full bg-secondary rounded-full h-2">
+          <div className="w-full bg-gray-800  rounded-full h-2">
             <div 
-              className="bg-gradient-to-r from-primary-glow to-info h-2 rounded-full transition-smooth"
+              className="bg-gradient-to-r from-blue-500 to-blue-500 h-2 rounded-full transition-smooth"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             />
           </div>
         </div>
+
+        {/* Question Box */} 
         <Card className="glassmorphic p-8 card-glow animate-scale-in">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-success rounded-full animate-pulse" />
-              <span className="text-sm text-muted-foreground font-medium">AI Interviewer</span>
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-sm  text-gray-500 font-medium">AI Interviewer</span>
             </div>
-            <h2 className="text-2xl font-semibold text-foreground leading-relaxed">
-              {questions[currentQuestion]}
-            </h2>
+           {questions.length > 0 && (
+  <h2 className="text-2xl font-semibold text-gray-400 leading-relaxed">
+    {questions[currentQuestion]}
+  </h2>
+)}
+
           </div>
         </Card>
+
+        {/* Answer Section */}
         <Card className="glassmorphic p-8 card-glow">
           <div className="space-y-6">
             <div className="text-center space-y-4">
@@ -158,7 +205,7 @@ export const InterviewInterface = () => {
                 onClick={handleRecordToggle}
                 className={`w-20 h-20 rounded-full transition-smooth ${
                   isRecording 
-                    ? 'bg-destructive hover:bg-destructive/90 pulse-record' 
+                    ? 'bg-red-500 hover:bg-red-500/90 pulse-record' 
                     : 'gradient-button hover:scale-110'
                 } border-0 shadow-xl`}
               >
@@ -168,33 +215,36 @@ export const InterviewInterface = () => {
                   <Mic className="w-8 h-8 text-primary-foreground" />
                 )}
               </Button>
-              <p className="text-muted-foreground text-sm">
+              <p className=" text-gray-500 text-sm">
                 {isRecording ? 'Recording... Click to stop' : 'Click to start recording'}
               </p>
             </div>
+
             {userAnswer && (
               <div className="space-y-3 animate-fade-in">
-                <h3 className="text-lg font-medium text-foreground">Your Answer:</h3>
-                <div className="bg-secondary/50 backdrop-blur-sm rounded-xl p-4 border border-glassmorphic-border">
-                  <p className="text-foreground leading-relaxed">{userAnswer}</p>
+                <h3 className="text-lg font-medium text-gray-400">Your Answer:</h3>
+                <div className="bg-gray-800 /50 backdrop-blur-sm rounded-xl p-4 border border-gray-700">
+                  <p className="text-gray-400 leading-relaxed">{userAnswer}</p>
                 </div>
               </div>
             )}
           </div>
         </Card>
+
+        {/* Feedback Section */}
         {showFeedback && (
           <Card className="glassmorphic p-8 card-glow animate-scale-in">
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-foreground">AI Feedback</h3>
+              <h3 className="text-xl font-semibold text-gray-400">AI Feedback</h3>
               <div className="grid gap-4">
                 {sampleFeedback.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg border border-glassmorphic-border">
+                  <div key={index} className="flex items-center justify-between p-4 bg-gray-800 /30 rounded-lg border border-gray-700">
                     <div className="space-y-1">
                       <div className="flex items-center space-x-3">
-                        <span className="font-medium text-foreground">{item.category}</span>
+                        <span className="font-medium text-gray-400">{item.category}</span>
                         <span className="text-2xl">{getScoreStars(item.score, item.maxScore)}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{item.feedback}</p>
+                      <p className="text-sm  text-gray-500">{item.feedback}</p>
                     </div>
                     <div className={`text-lg font-semibold ${getScoreColor(item.color)}`}>
                       {item.score}/{item.maxScore}
@@ -223,25 +273,27 @@ export const InterviewInterface = () => {
             </div>
           </Card>
         )}
+
+        {/* Final Summary Panel */}
         {showFeedback && currentQuestion === questions.length - 1 && (
           <Card className="glassmorphic p-8 card-glow animate-scale-in">
             <div className="text-center space-y-6">
-              <h3 className="text-2xl font-bold text-foreground">Interview Complete! 🎉</h3>
+              <h3 className="text-2xl font-bold text-gray-400">Interview Complete! 🎉</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-success">4.0</div>
-                  <div className="text-sm text-muted-foreground">Overall Score</div>
+                  <div className="text-3xl font-bold text-green-500">4.0</div>
+                  <div className="text-sm  text-gray-500">Overall Score</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-info">85%</div>
-                  <div className="text-sm text-muted-foreground">Confidence Level</div>
+                  <div className="text-3xl font-bold text-blue-500">85%</div>
+                  <div className="text-sm  text-gray-500">Confidence Level</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-warning">Good</div>
-                  <div className="text-sm text-muted-foreground">Performance</div>
+                  <div className="text-3xl font-bold border-yellow-500">Good</div>
+                  <div className="text-sm  text-gray-500">Performance</div>
                 </div>
               </div>
-              <p className="text-muted-foreground max-w-md mx-auto">
+              <p className=" text-gray-500 max-w-md mx-auto">
                 Great job! You showed strong technical knowledge and communication skills. 
                 Focus on providing more specific examples in future interviews.
               </p>

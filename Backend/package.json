@@ -11,9 +11,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongod": "^2.0.0",
     "mongoose": "^8.16.2",
+    "multer": "^2.0.2",
     "nodemin": "^1.0.1",
     "nodemon": "^3.1.10",
-    "openai": "^5.9.0",
+    "openai": "^5.10.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   }
