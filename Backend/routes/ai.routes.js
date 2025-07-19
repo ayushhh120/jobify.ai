@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { generateSummary } = require("../controllers/ai.controller");
-const {generateInterviewQuestions} = require('../controllers/ai.controller.js')
-const {transcribeAudio} = require('../controllers/ai.controller.js')
+const { generateSummary, generateInterviewQuestions, transcribeAudio } = require("../controllers/ai.controller");
 const multer = require('multer')
 const upload = multer();
 

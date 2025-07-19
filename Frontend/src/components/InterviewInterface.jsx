@@ -73,7 +73,7 @@ const [audioChunks, setAudioChunks] = useState([]);
     recorder.onstop = async () => {
       const audioBlob = new Blob(chunks, { type: 'audio/webm' });
       const formData = new FormData();
-      formData.append("audio", audioBlob);
+      formData.append("audio", audioBlob, "recording.webm");
 
       const res = await fetch(`${import.meta.env.VITE_BASE_URL}/ai/transcribe-audio`, {
         method: "POST",

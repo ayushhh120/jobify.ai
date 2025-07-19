@@ -102,12 +102,14 @@ export const generateInterviewQuestions = async (req, res) => {
 
 export const transcribeAudio = async (req, res) => {
   try {
-    const audioBuffer = req.file.buffer;
+  
+     const audioBuffer = req.file.buffer;
+    const mimeType = req.file.mimetype;
 
     const response = await axios.post("https://api.deepgram.com/v1/listen", audioBuffer, {
       headers: {
         Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
-        "Content-Type": "audio/webm",
+        "Content-Type": mimeType,
       },
     });
 
