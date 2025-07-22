@@ -39,3 +39,37 @@ textarea {
     border-radius: 0.25rem !important;
   }
 }
+
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-area {
+    font-size: 20px !important;
+    line-height: 2 !important;
+    color: #000 !important;
+    padding: 25px !important;
+  }
+
+  .print-area h1 {
+    font-size: 30px !important;
+    font-weight: 800 !important;
+  }
+
+  .print-area h2 {
+    font-size: 25px !important;
+    font-weight: 700 !important;
+  }
+
+  .print-area span,
+  .print-area p {
+    font-size: 20px !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

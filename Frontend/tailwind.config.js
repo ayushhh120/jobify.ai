@@ -5,7 +5,7 @@ export default {
     "./components/**/*.{js,jsx,ts,tsx}",
     "./app/**/*.{js,jsx,ts,tsx}",
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./src/**/*.css", // Added to include CSS files like lovable.css
+    "./src/**/*.css", 
   ],
   prefix: "",
   theme: {
@@ -99,5 +99,5 @@ export default {
       }
     }
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [("tailwindcss-animate")],
 };

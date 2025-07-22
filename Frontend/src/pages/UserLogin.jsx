@@ -53,17 +53,17 @@ const UserLogin = () => {
   return (
     <div className='h-screen w-screen bg-gray-800'>
 
-      <div className="flex p-4 flex-col h-140 w-120 rounded-xl item-center absolute left-35 mt-11 bg-gray-900">
+      <div className="flex p-4 flex-col h-140 w-120 rounded-xl item-center absolute left-35 mt-11 bg-gray-900 glassmorphic card-glow transition-smooth hover:scale-102">
 
-        <h2 className='flex text-3xl ml-15 mt-5 font-bold text-white'>Hello, Welcome back :)</h2>
+        <h2 className='flex text-3xl ml-15 mt-5 font-bold text-gray-400'>Hello, Welcome back :)</h2>
 
         <div className="w-110 pt-20 bg-gray-900 text-gray-100 h-120 pl-20 rounded-xl">
 
           <form onSubmit={(e)=>{
         submitHandler(e)
       }}>
-       <h3 className='text-xl font-medium ml-2 mt-2'>Enter your email</h3>
-        <input className='bg-[#eeeeee2d] pl-2 w-63 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]'
+       <h3 className='text-xl text-gray-300 font-medium ml-2 mt-2'>Enter your email</h3>
+        <input className='bg-[#eeeeee2d] pl-2 w-63 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300'
          type="text" required
         value={email}
         onChange={(e)=>{
@@ -71,8 +71,8 @@ const UserLogin = () => {
         }}
          placeholder='Email'/>
        
-       <h3 className='text-xl font-medium ml-2 mt-6'>Enter your password</h3>
-        <input className='bg-[#eeeeee2d] w-63 pl-2 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]'
+       <h3 className='text-xl text-gray-300 font-medium ml-2 mt-6'>Enter your password</h3>
+        <input className='bg-[#eeeeee2d] w-63 pl-2 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300'
          type="text" required 
         value={password}
         onChange={(e)=>{

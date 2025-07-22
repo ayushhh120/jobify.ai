@@ -43,24 +43,26 @@ const UserSignup = () => {
 
   return (
     <div className='h-screen w-screen bg-gray-800'>
-      <div className="flex bg-gray-900 text-white flex-col h-145 w-130 rounded-xl item-center absolute left-35 mt-9 ">
-        <h2 className='flex ml-8  mt-4 mb-3 text-3xl font-semibold'>Hello, Welcome to Ai Resume Builder</h2>
+      <div className="flex bg-gray-900 card-glow  transition-smooth hover:scale-102 text-white flex-col h-145 w-130 rounded-xl item-center absolute left-35 mt-9 ">
+        <h2 className='flex ml-15 text-gray-400 mt-6 mb-6 text-3xl font-semibold'>Hello, Welcome to Jobfy.ai</h2>
 
         <div className="w-118 bg-gray-900 text-gray-100 h-120 ml-5 pl-25 rounded-xl">
        <form onSubmit={(e)=>{
         submitHandler(e)
       }}>
         
-        <h3 className='text-xl font-medium ml-2 mt-4'>Enter your name</h3>
+        <h3 className='text-xl text-gray-300 font-medium ml-2 mt-4'>Enter your name</h3>
        <div className='flex gap-4 mt-3 ml-2'>
-        <input className='bg-[#eeeeee2d] w-30 px-1 py-1 pl-2 mb-4 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43b3c7] text-base placeholder:text-[12px]'
+        <input className='bg-[#eeeeee2d] glassmorphic w-30 px-1 py-1 plf-2 mb-4 h-9 rounded-lg 
+        focus:outline-none 
+        focus:ring-2 focus:ring-purple-300 transition-all duration-300 text-base placeholder:text-[12px]'
         type="text" required 
           value={firstName}
           onChange={(e)=>{
           setFirstName(e.target.value)
         }}
         placeholder='Firstname'/>
-        <input className='bg-[#eeeeee2d] w-30 px-1 py-1 pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43b3c7] mb-4 text-base placeholder:text-[12px]'
+        <input className='bg-[#eeeeee2d] w-30 px-1 py-1 pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 mb-4 text-base placeholder:text-[12px]'
          type="text" required 
            value={lastName}
           onChange={(e)=>{
@@ -68,8 +70,8 @@ const UserSignup = () => {
         }}
          placeholder='Lastname'/>
        </div>
-       <h3 className='text-xl font-medium ml-2 mt-2'>Enter your email</h3>
-        <input className='bg-[#eeeeee2d] w-63 px-1 py-1  pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43b3c7] ml-2 mt-2  text-base placeholder:text-[12px]'
+       <h3 className='text-xl text-gray-300 font-medium ml-2 mt-2'>Enter your email</h3>
+        <input className='bg-[#eeeeee2d] w-63 px-1 py-1  pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 ml-2 mt-2  text-base placeholder:text-[12px]'
          type="text" required
            value={email}
           onChange={(e)=>{
@@ -77,8 +79,8 @@ const UserSignup = () => {
         }}
          placeholder='Email'/>
        
-       <h3 className='text-xl font-medium ml-2 mt-6'>Create new password</h3>
-        <input className='bg-[#eeeeee2d] w-63 px-1 py-1 pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#43b3c7] ml-2 mt-2 text-base placeholder:text-[12px]'
+       <h3 className='text-xl text-gray-300 font-medium ml-2 mt-6'>Create new password</h3>
+        <input className='bg-[#eeeeee2d] w-63 px-1 py-1 pl-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 ml-2 mt-2 text-base placeholder:text-[12px]'
          type="text" required 
            value={password}
           onChange={(e)=>{
