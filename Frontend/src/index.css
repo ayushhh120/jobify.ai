@@ -36,7 +36,7 @@ textarea {
     background: #D1D5DB !important;
     color: #000 !important;
     padding: 0.25rem 0.5rem !important;
-    border-radius: 0.25rem !important;
+    border-radius: 0.25rem !important; 
   }
 }
 
@@ -72,4 +72,137 @@ textarea {
   .no-print {
     display: none !important;
   }
+}
+
+@media(max-width: 1150px){
+  .image-container{
+    display: flex;
+  }
+  .image-container img{
+    width: 80%;
+    margin-left: 110px;
+  }
+
+   .signup-form-container{
+    position: absolute;
+    left: 34px
+   }
+
+    .login-form-container{
+    position: absolute;
+    left: 65px
+   }
+}
+
+@media(max-width: 800px){
+
+   .image-container{
+    display: none;
+  }
+  .sign-up-page{
+    background-color: #1118273b
+  }
+
+  .signup-form-container{
+    position: absolute;
+    margin-top: 115px;
+    margin-right: 30px;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
+  }
+
+  .signup-form-container h2{
+    font-size: 28px;
+  }
+
+  .signup-form-container h3{
+    font-size: 21px;
+  }
+
+  .sign-up-page input{
+    height: 38px;
+  }
+
+  /* Login page */
+
+  .login-up-page{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1118273b;
+
+    /* background-color: #1118273b */
+  }
+
+  .login-form-container{
+    position: static;
+    height: 70%;
+    width: 85%;
+    margin-top: 115px;
+    margin-right: px;
+    padding-left: 2px;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
+  }
+
+  .login-form-2{
+    width: 96%;
+    padding-left: 5%;
+    margin-left: 5%;
+  }
+
+
+  .login-form-container h2{
+    font-size: 33px;
+    margin-top: 30px;
+    height: 90px;
+    margin-left: 10px;
+  }
+
+  .login-form-container h3{
+    font-size: 25px;
+
+  }
+
+
+  .login-up-page input{
+    height: 42px;
+    width: 90%;
+    margin-top: 13px;
+  }
+
+  .login-up-page input::placeholder{
+    font-size: 18px;
+ 
+  }
+
+ .login-up-page button{
+  margin-top: 32px;
+  margin-left: 20px;
+ }
+
+ .login-form-container a{
+  margin-left: 33px;
+  margin-top: 22px;
+ }
+
+ .login-form-container p{
+  width: 80%;
+  margin-left: 5%;
+  display: block;
+ }
+
+ .homeButton{
+  margin-top: 8px;
+  margin-bottom: 22px;
+ }
+
+ .homeButton2{
+  top: 25px;
+ }
+
+
+
 }

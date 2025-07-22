@@ -35,7 +35,7 @@ const UserLogin = () => {
       const data = response.data;
       setUser(data.user);
       localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      navigate('/');
     }
 
     // Clear form fields
@@ -51,18 +51,18 @@ const UserLogin = () => {
 
 
   return (
-    <div className='h-screen w-screen bg-gray-800'>
+    <div className='login-up-page h-screen w-screen bg-gray-800'>
 
-      <div className="flex p-4 flex-col h-140 w-120 rounded-xl item-center absolute left-35 mt-11 bg-gray-900 glassmorphic card-glow transition-smooth hover:scale-102">
+      <div className="login-form-container flex w-120 bg-gray-900 text-white flex-col rounded-xl mx-auto mt-4 md:mt-9 max-w-sm md:max-w-md lg:max-w-lg px-4 md:px-0 md:absolute md:left-8 lg:left-35 glassmorphic card-glow transition-smooth hover:scale-102 animate-fade-in">
 
-        <h2 className='flex text-3xl ml-15 mt-5 font-bold text-gray-400'>Hello, Welcome back :)</h2>
+        <h2 className='text-xl md:text-2xl lg:text-3xl font-semibold text-center md:text-left px-4 md:px-15 mt-8 bg-gradient-to-r from-blue-200 to-indigo-500 text-transparent bg-clip-text '>Hello, Welcome back :)</h2>
 
-        <div className="w-110 pt-20 bg-gray-900 text-gray-100 h-120 pl-20 rounded-xl">
+        <div className="login-form-2 w-110 pt-20 bg-gray-900 text-gray-100 h-120 pl-25 mb-5 rounded-xl">
 
           <form onSubmit={(e)=>{
         submitHandler(e)
       }}>
-       <h3 className='text-xl text-gray-300 font-medium ml-2 mt-2'>Enter your email</h3>
+       <h3 className='text-xl text-gray-300 font-medium ml-2'>Enter your email</h3>
         <input className='bg-[#eeeeee2d] pl-2 w-63 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300'
          type="text" required
         value={email}
@@ -95,11 +95,12 @@ const UserLogin = () => {
   <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />
   Continue with Google
 </a>
-          <p className='text-center text-sm mr-22 mt-3'>New here? <Link to={'/signup'} className='text-blue-500'>Create new account</Link></p>
+          <p className='text-center text-sm mr-20 mt-4'>New here? <Link to={'/signup'} className='text-blue-500'>Create new account</Link></p>
         </div>
                
       </div>
-        <div className="flex flex-col mt-4 mr-1 rounded-lg absolute right-2 items-center justify-center h-155 w-140">
+        <div className="image-container
+ flex flex-col mt-4 mr-1 rounded-lg absolute right-2 items-center justify-center h-155 w-140">
           <img className='w-screen rounded-2xl h-screen object-cover' src='/images/loginImage.webp'></img>
         </div>
     </div>

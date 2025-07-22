@@ -1,5 +1,4 @@
-import { InterviewInterface } from '../components/InterviewInterface';
-
+import { InterviewInterface } from "../components/InterviewInterface";
 
 const MockInterview = () => {
   return <InterviewInterface />;

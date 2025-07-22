@@ -1,9 +1,10 @@
 
 import { useRef, useState } from "react";
-
+import { Button } from "@/components/ui/button";
 import ResumeForm from '@/components/ResumeForm';
+import { useNavigate } from 'react-router-dom';
 
-const Dashboard = () => {
+const ResumeBuilder = () => {
 
   const printRef = useRef();
 
@@ -26,11 +27,29 @@ const [downloading, setDownloading] = useState(false);
     socialLinks: []
   });
 
+  const navigate = useNavigate()
+
+  const handleHome = ()=>{
+    navigate('/')
+  }
+
   
   return (
     <div className="min-h-screen gradient-hero p-6">
+      <div className='homeButton h-10 flex ml-[1%] items-center w-30 animate-fade-in'>
+                              <Button
+                                onClick={handleHome}
+                                className="bg-gradient-to-r from-indigo-400 
+                                h-9 to-blue-800 hover:scale-105 
+                                gradient-button transition-smooth border-0 font-bold text-gray-200 w-10 shadow-xl cursor-pointer"
+                                size="lg"
+                              >
+                              <i className="ri-home-line"></i>
+                              </Button>
+                              </div>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 animate-fade-in">
+          
           <h1 className="text-4xl font-bold text-gray-200 mb-2">
             📄 AI Resume Builder
           </h1>
@@ -149,4 +168,4 @@ const [downloading, setDownloading] = useState(false);
   );
 };
 
-export default Dashboard;
+export default ResumeBuilder;

@@ -7,6 +7,7 @@ import 'remixicon/fonts/remixicon.css'
 import {BrowserRouter} from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
 import { ThemeProvider } from '@/context/ThemeContext'
+import 'remixicon/fonts/remixicon.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

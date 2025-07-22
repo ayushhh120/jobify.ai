@@ -1,87 +1,206 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import axios from 'axios'
-import jsPDF from "jspdf";
-import html2pdf from 'html2pdf.js';
-import { useRef } from "react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, X, Sparkles, Download, Loader2 } from "lucide-react";
+import ResumeBuilder from "../pages/ResumeBuilder";
+import { exportToPDF } from "@/utils/exportPDF";
+import axios from "axios";
 
-const ResumeForm = ({ formData, setFormData,  }) => {
-  const [socialLinks, setSocialLinks] = useState([]);
-  const [showInput, setShowInput] = useState(false);
+
+const ResumeForm = ({ formData, setFormData,  printRef }) => {
+  const [showSocialInput, setShowSocialInput] = useState(false);
   const [currentPlatform, setCurrentPlatform] = useState("");
   const [currentLink, setCurrentLink] = useState("");
-  const [summary, setSummary] = useState("");
   const [currentSkill, setCurrentSkill] = useState("");
-
   const [currentRole, setCurrentRole] = useState("");
   const [currentCompany, setCurrentCompany] = useState("");
   const [currentDuration, setCurrentDuration] = useState("");
-  
-
   const [currentDegree, setCurrentDegree] = useState("");
   const [currentInstitution, setCurrentInstitution] = useState("");
   const [currentYear, setCurrentYear] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [filteredSkills, setFilteredSkills] = useState([]);
+  const [showPlaceholder, setShowPlaceholder] = useState(true)
+
+const skillSuggestions = [  
+  // 🔧 Programming Languages
+  "JavaScript",  
+  "TypeScript",  
+  "Python",  
+  "Java",  
+  "C++",  
+  "C#",  
+  "Go",  
+  "Ruby",  
+  "Swift",  
+  "Kotlin",  
+  "PHP",  
+  "Rust",
+
+  // 🌐 Frontend Development
+  "React",  
+  "Next.js",  
+  "Angular",  
+  "Vue.js",  
+  "Svelte",  
+  "HTML",  
+  "CSS",  
+  "Tailwind",  
+  "Bootstrap",  
+  "UI/UX Design",
+
+  // ⚙️ Backend & Fullstack
+  "Node.js",  
+  "Express",  
+  "Django",  
+  "Flask",  
+  "Spring Boot",  
+  "GraphQL",  
+  "REST API",  
+  "Fullstack Development",  
+
+  // 🧠 AI / Machine Learning / Data
+  "Machine Learning",  
+  "Deep Learning",  
+  "Natural Language Processing (NLP)",  
+  "Computer Vision",  
+  "Data Analysis",  
+  "Data Science",  
+  "TensorFlow",  
+  "PyTorch",  
+  "Pandas",  
+  "NumPy",  
+  "Scikit-learn",  
+  "Matplotlib",
+
+  // ☁️ DevOps / Cloud
+  "AWS",  
+  "Azure",  
+  "Google Cloud",  
+  "Docker",  
+  "Kubernetes",  
+  "CI/CD",  
+  "Jenkins",  
+  "Terraform",
+
+  // 🗃️ Databases
+  "MongoDB",  
+  "MySQL",  
+  "PostgreSQL",  
+  "SQLite",  
+  "Firebase",  
+  "Redis",
+
+  // 🔐 Cybersecurity
+  "Ethical Hacking",  
+  "Penetration Testing",  
+  "Network Security",  
+  "Cryptography",  
+  "OWASP",  
+  "Cybersecurity Fundamentals",
+
+  // 📱 Mobile App Development
+  "React Native",  
+  "Flutter",  
+  "Android Development",  
+  "iOS Development",  
+  "SwiftUI",  
+
+  // 🎓 Teaching / Education
+  "Public Speaking",  
+  "Online Teaching",  
+  "Curriculum Development",  
+  "EdTech Tools",  
+  "LMS Platforms",
+
+  // 🩺 Medical / Paramedical
+  "Clinical Research",  
+  "Medical Writing",  
+  "EMR Systems",  
+  "Nursing Skills",  
+  "Radiology",  
+  "Phlebotomy",  
+  "CPR/First Aid",
+
+  // 🧰 Project & Team Management
+  "Project Management",  
+  "Agile",  
+  "Scrum",  
+  "Team Leadership",  
+  "Time Management",
+
+  // 🧑‍💼 Soft Skills
+  "Communication",  
+  "Problem Solving",  
+  "Adaptability",  
+  "Critical Thinking",  
+  "Collaboration",
+
+  // 💻 Tools & Misc
+  "Git",  
+  "Figma",  
+  "Notion",  
+  "Jira",  
+  "Postman",  
+  "Visual Studio Code",  
+];
 
 
+  const handleSkillInput = (e) => {
+    const value = e.target.value;
+    setCurrentSkill(value);
 
-const handleAddLink = () => {
-  if (currentPlatform && currentLink) {
-    const newLinks = [
-      ...formData.socialLinks,
-      { platform: currentPlatform, url: currentLink },
-    ];
+    if (value.trim() === "") {
+      setFilteredSkills([]);
+      return;
+    }
 
-    setFormData({ ...formData, socialLinks: newLinks });
-
-    setCurrentPlatform("");
-    setCurrentLink("");
-    setShowInput(false);
-  }
-};
-
-const handleRemove = (idx) => {
-  const updatedLinks = [...formData.socialLinks];
-  updatedLinks.splice(idx, 1);
-  setFormData({ ...formData, socialLinks: updatedLinks });
-};
-
+    const filtered = skillSuggestions.filter((skill) =>
+      skill.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSkills(filtered);
+  };
 
   const handleAddSkill = () => {
     if (currentSkill.trim() === "") return;
-
     setFormData({
       ...formData,
       skill: [...formData.skill, currentSkill.trim()],
     });
     setCurrentSkill("");
+    setFilteredSkills([]);
   };
 
   const handleRemoveSkill = (index) => {
     const updatedSkills = [...formData.skill];
     updatedSkills.splice(index, 1);
-
     setFormData({ ...formData, skill: updatedSkills });
+  };
+
+  const selectSkillFromSuggestion = (skill) => {
+    setFormData({
+      ...formData,
+      skill: [...formData.skill, skill],
+    });
+    setCurrentSkill("");
+    setFilteredSkills([]);
   };
 
   const handleAddExperience = () => {
     if (!currentRole || !currentCompany || !currentDuration) return;
-
     const newExp = {
       role: currentRole,
       company: currentCompany,
       duration: currentDuration,
-      points: [], // you can add bullet points later
     };
-
     setFormData({
       ...formData,
       experience: [...formData.experience, newExp],
     });
-
     setCurrentRole("");
     setCurrentCompany("");
     setCurrentDuration("");
@@ -95,18 +214,15 @@ const handleRemove = (idx) => {
 
   const handleAddEducation = () => {
     if (!currentDegree || !currentInstitution || !currentYear) return;
-
     const newEdu = {
       degree: currentDegree,
       institution: currentInstitution,
       year: currentYear,
     };
-
     setFormData({
       ...formData,
       education: [...formData.education, newEdu],
     });
-
     setCurrentDegree("");
     setCurrentInstitution("");
     setCurrentYear("");
@@ -118,508 +234,520 @@ const handleRemove = (idx) => {
     setFormData({ ...formData, education: updated });
   };
 
-
-  const skillSuggestions = [
-  // Programming Languages
-  "JavaScript", "TypeScript", "Python", "Java", "C++", "C", "C#", "Go", "Rust", "Ruby", "PHP", "Swift", "Kotlin", "R", "Scala", "assembly",
-
-  // Web Development
-  "HTML", "CSS", "Tailwind", "Bootstrap", "React", "Next.js", "Angular", "Vue.js", "Svelte", 
-  "Node.js", "Express", "Django", "Flask", "Spring Boot", "ASP.NET", "FastAPI",
-
-  // Database & Backend
-  "MongoDB", "MySQL", "PostgreSQL", "Firebase", "Redis", "GraphQL", "Supabase", "SQLite",
-
-  // DevOps / Cloud
-  "Docker", "Kubernetes", "Git", "GitHub Actions", "CI/CD", "AWS", "Azure", "Google Cloud", "Heroku", "Netlify", "Vercel",
-
-  // AI / ML / Data Science
-  "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "Scikit-Learn", "Pandas", "NumPy", "OpenCV", "Matplotlib", "NLP", "Computer Vision", "Data Analysis", "Data Visualization", "Jupyter", "Hugging Face", "LLMs",
-
-  // Cybersecurity
-  "Network Security", "Penetration Testing", "Ethical Hacking", "Kali Linux", "Wireshark", "Burp Suite", "OWASP", "Information Security", "Cryptography",
-
-  // Business / Soft Skills / PM
-  "Agile", "Scrum", "Product Management", "Business Analysis", "Excel", "Power BI", "Tableau", "Project Management", "Communication", "Leadership", "Time Management",
-
-  // Data Engineering
-  "ETL", "Apache Kafka", "Apache Spark", "Airflow", "Hadoop", "BigQuery", "Snowflake", "Data Warehousing", "Data Pipelines",
-
-  // Other Tools & Tech
-  "Figma", "Jira", "Notion", "Postman", "REST API", "GraphQL", "Linux", "Shell Scripting", "Trello", "Slack", "Networking", "Operating system", "Canva", "Photoshop", "UI/UX Designing"
-];
-
-
-const [filteredSkills, setFilteredSkills] = useState([]);
-
-const handleSkillInput = (e) => {
-  const value = e.target.value;
-  setCurrentSkill(value);
-
-  if (value.trim() === "") {
-    setFilteredSkills([]);
-    return;
-  }
-
-  const filtered = skillSuggestions.filter((skill) =>
-    skill.toLowerCase().includes(value.toLowerCase())
-  );
-  setFilteredSkills(filtered);
-};
-
-const generateSummary = async () => {
-  if (!formData.jobTitle || !formData.skill.length) {
-    alert("Please enter your job title and skills before generating summary.");
-    return;
-  }
-
-   setLoading(true); 
-
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/ai/summary`,
-      {
-        jobTitle: formData.jobTitle,
-        skills: formData.skill.join(", "), 
-      }
-    );
-
-    setFormData({ ...formData, summary: response.data.summary });
-  } catch (err) {
-    console.error("AI Summary generation failed:", err);
-    const errorMsg = err?.response?.data?.error || "Something went wrong while generating summary";
-    alert(errorMsg);
-  } finally {
-    setLoading(false); 
-  }
-};
-
-
-
-const handleDownloadPDF = () => {
-  setDownloading(true);
-
-  const element = document.getElementById('resume-preview');
-  if (!element) {
-    alert('Resume preview not found!');
-    return;
-  }
-
-
-  element.querySelectorAll("*").forEach((el) => {
-    const computedColor = getComputedStyle(el).color;
-    if (computedColor.includes("oklch")) {
-      el.style.color = "#000"; 
+  const handleAddSocialLink = () => {
+    if (currentPlatform && currentLink) {
+      const newLinks = [
+        ...formData.socialLinks,
+        { platform: currentPlatform, url: currentLink },
+      ];
+      setFormData({ ...formData, socialLinks: newLinks });
+      setCurrentPlatform("");
+      setCurrentLink("");
+      setShowSocialInput(false);
     }
-
-    const bgColor = getComputedStyle(el).backgroundColor;
-    if (bgColor.includes("oklch")) {
-      el.style.backgroundColor = "#fff"; 
-    }
-  });
-
-  const opt = {
-    margin: 0.3,
-    filename: 'resume.pdf',
-    image: { type: 'jpeg', quality: 2 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(element).save().then(() => {
-    setDownloading(false);
-  }).catch((err) => {
-    console.error("PDF download failed", err);
-    setDownloading(false);
-  });
-};
+  const handleRemoveSocialLink = (idx) => {
+    const updatedLinks = [...formData.socialLinks];
+    updatedLinks.splice(idx, 1);
+    setFormData({ ...formData, socialLinks: updatedLinks });
+  };
+  
+  const generateSummary = async (e) => {
+    setShowPlaceholder(false)
+    if (!formData.jobTitle || !formData.skill.length) {
+      alert(
+        "Please enter your job title and skills before generating summary."
+      );
+      return;
+    }
+    e.preventDefault();
+    setLoading(true);
+    
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/ai/summary`,
+        {
+          jobTitle: formData.jobTitle,
+          skills: formData.skill.join(", "),
+        }
+      );
+      setFormData({ ...formData, summary: response.data.summary });
+    } catch (err) {
+      console.error("AI Summary generation failed:", err);
+      const errorMsg =
+        err?.response?.data?.error ||
+        "Something went wrong while generating summary";
+      alert(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
 
 
   return (
-    <div className="h-screen">
-      <div className="rounded-[18px] text-gray-200 placeholder:text-black mt-5 ml-2 w-125">
-        <h2 className="flex ml-2 mb-3 text-[20px] font-semibold">
-          Enter your personal details
-        </h2>
-        <h3 className="text-lg font-medium ml-3 mt-8">Enter your Fullname</h3>
-
-        <input
-          className="bg-[#eeeeee2d] w-100 h-10 px-1 py-1 mb-2 mt-2 ml-2 rounded-lg pl-3 text-[14px] placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
-          type="text"
-          required
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Fullname"
-        />
-
-        <div className="flex items-center gap-1 mt-2">
-          <h3 className="text-sm font-medium mr-1 ml-3 mt-2">Email:</h3>
-          <input
-            className="bg-[#eeeeee2d] w-35 h-10 mt-2 rounded-lg pl-3 pr-2 text-[14px] placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
-            type="text"
-            required
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            placeholder="Email"
-          />
-
-          <h3 className="text-sm font-medium ml-3 mt-2">Phone:</h3>
-          <input
-            className="bg-[#eeeeee2d] w-35 h-10 ml-1 mt- rounded-lg pl-3 text-[14px] placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
-            type="text"
-            required
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-            placeholder="Phone"
-          />
-        </div>
-
-<h3 className="text-lg font-medium ml-3 mt-6">Job Title</h3>
-        <input
-          className="bg-[#eeeeee2d] w-100 h-10 px-1 py-1 ml-2 mt-2 rounded-lg pl-3 text-[14px] placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
-          type="text"
-          required
-          value={formData.jobTitle}
-          onChange={(e) =>
-            setFormData({ ...formData, jobTitle: e.target.value })
-          }
-          placeholder="Enter Job Title"
-        />
-
-        <h3 className="text-lg font-medium ml-3 mt-6">Location</h3>
-        <input
-          className="bg-[#eeeeee2d] w-100 h-10 px-1 py-1 ml-2 mt-2 rounded-lg pl-3 text-[14px] placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
-          type="text"
-          required
-          value={formData.location}
-          onChange={(e) =>
-            setFormData({ ...formData, location: e.target.value })
-          }
-          placeholder="Location"
-        />
-
-        
-
-         {/* Skills */}
-        <h3 className="text-lg font-medium ml-3 mt-6">Skills</h3>
-
-        <div className="ml-2 mt-2">
-          <div className="flex relative gap-2 mb-2">
-            <input
-              type="text"
-              placeholder="Enter a skill"
-              value={currentSkill}
-              onChange={handleSkillInput}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d]  text-sm placeholder:text-[12px]focus:outline-none placeholder:text-[12px] focus:ring-2 focus:ring-[#43b3c7]"
+    <div className="space-y-6 animate-fade-in">
+      {/* Personal Details */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+            👤 Personal Details
+          </CardTitle>
+          <p className="text-sm text-gray-500">Enter your basic information</p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-sm font-medium text-gray-900 dark:text-gray-200  mb-2 block">
+              Full Name
+            </Label>
+            <Input
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              placeholder="Enter your full name"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
             />
-            <button
-              onClick={handleAddSkill}
-              className="bg-gray-800 text-[#81d1df] px-3 py-1 rounded-xl hover:bg-gray-700 cursor-pointer text-[14px]"
-            >
-              + Add
-            </button>
-              
-  {/* Suggestion Box */}
-             {filteredSkills.length > 0 && (
-    <ul className="absolute top-11 w-64 bg-gray-200 z-10 rounded-md shadow-md max-h-40 overflow-auto text-black">
-      {filteredSkills.map((skill, idx) => (
-        <li
-          key={idx}
-          onClick={() => {
-            setFormData({
-              ...formData,
-              skill: [...formData.skill, skill],
-            });
-            setCurrentSkill("");
-            setFilteredSkills([]);
-          }}
-          className="px-3 py-2 cursor-pointer hover:bg-gray-200 text-sm"
-        >
-          {skill}
-        </li>
-      ))}
-    </ul>
-  )}
           </div>
 
-          {/* Display added skills */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium text-gray-900 dark:text-gray-200  mb-2 block">
+                Email
+              </Label>
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                placeholder="your.email@example.com"
+                className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              />
+            </div>
+            <div>
+              <Label className="text-sm font-medium text-gray-900 dark:text-gray-200  mb-2 block">
+                Phone
+              </Label>
+              <Input
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                placeholder="+91 8500110011"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium text-gray-900 dark:text-gray-200  mb-2 block">
+                Job Title
+              </Label>
+              <Input
+                value={formData.jobTitle}
+                onChange={(e) =>
+                  setFormData({ ...formData, jobTitle: e.target.value })
+                }
+                placeholder="e.g. Frontend Developer"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              />
+            </div>
+            <div>
+              <Label className="text-sm font-medium text-gray-900 dark:text-gray-200  mb-2 block">
+                Location
+              </Label>
+              <Input
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
+                placeholder="City, Country"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Skills */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+            🔧 Skills
+          </CardTitle>
+          <p className="text-sm text-gray-500">
+            Add your technical and professional skills
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="relative">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Input
+                  value={currentSkill}
+                  onChange={handleSkillInput}
+                  placeholder="Type a skill..."
+                  className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                />
+
+                {filteredSkills.length > 0 && (
+                  <div className="absoute top-full left-0 right-0 mt-1 bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-lg shadow-xl z-10 max-h-40 overflow-auto">
+                    {filteredSkills.map((skill, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => selectSkillFromSuggestion(skill)}
+                        className="px-3 py-2 z-50 cursor-pointer hover:bg-white/10 text-gray-900 dark:text-gray-200  text-sm transition-all duration-300"
+                      >
+                        {skill}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Button
+                onClick={handleAddSkill}
+                className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300"
+                size="sm"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
           <div className="flex flex-wrap gap-2">
-            {formData.skill.map((sk, index) => (
+            {formData.skill.map((skill, index) => (
               <div
                 key={index}
-                className="flex items-center gap-1 mt-2 bg-gray-800 px-3 py-1 rounded-full text-sm"
+                className="flex items-center gap-2 bg-blue-500/20 text-blue-500 px-3 py-1 rounded-full text-sm border border-blue-500/30 animate-scale-in"
               >
-                {sk}
+                {skill}
                 <button
                   onClick={() => handleRemoveSkill(index)}
-                  className="text-red-500 hover:text-red-700 cursor-pointer "
+                  className="text-red-400 hover:text-red-300 transition-colors"
                 >
-                  ×
+                  <X className="w-3 h-3" />
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-{/* Summary */}
-
-        <h3 className="text-lg font-medium ml-3 mt-6">Summary</h3>
-                <button
-    onClick={generateSummary}
-    className="text-sm bg-[#1b6679] cursor-pointer hover:bg-[#1b6679af] text-white py-1 px-3 ml-62 rounded-lg"
-  >
-    ✨ Generate with AI
-  </button>
-        <div className="relative w-100 h-52 ml-2 mt-2">
-          {(loading || formData.summary.length === 0) && (
-            <div className="absolute top-1/2 left-1/2 text-[12px] text-gray-500 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center px-6">
-               {loading ? (
-        <div className="flex items-center gap-2 text-sm">
-          <svg className="animate-spin h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-          </svg>
-          Generating summary with AI...
-        </div>
-      ) : (
-              <p>Write your summary here or use AI to autogenerate summary</p>
-                )}
+      {/* Summary */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+                📝 Professional Summary
+              </CardTitle>
+              <p className="text-sm text-gray-500">
+                Describe your professional background
+              </p>
             </div>
-          )}
+            <Button
+              onClick={generateSummary}
+              disabled={loading || !formData.jobTitle || !formData.skill.length}
+              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300"
+              size="sm"
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4" />
+              )}
+              Generate with AI
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="relative">
+            <Textarea
+              value={formData.summary}
+              onChange={(e) =>
+                setFormData({ ...formData, summary: e.target.value })
+              }
+              placeholder={showPlaceholder ? "Write your professional summary or use AI to generate one, Job title and Skills fields are required to generate summary with AI" : ""}
+              className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 min-h-32 resize-none"
+            />
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-400">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-sm">Generating with AI...</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-          <textarea
-            value={formData.summary}
-            onChange={(e) =>
-              setFormData({ ...formData, summary: e.target.value })
-            }
-            className="bg-[#eeeeee2a] w-full h-full rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#43b3c7] overflow-auto
-resize-none text-white"
-          />
-        </div>
-
-       
-
-        {/* Experiance */}
-
-        <h3 className="text-lg font-medium ml-3 mt-6">
-          Experience <span className="text-sm text-gray-500">(optional)</span>
-        </h3>
-
-        <div className="ml-2 mt-2">
-          <div className="flex flex-col gap-2 mb-2">
-            <input
-              type="text"
-              placeholder="Role (e.g. Frontend Developer)"
+      {/* Experience */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+            💼 Experience
+            <span className="text-sm text-gray-500 font-normal ml-2">
+              (optional)
+            </span>
+          </CardTitle>
+          <p className="text-sm text-gray-500">Add your work experience</p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4">
+            <Input
               value={currentRole}
               onChange={(e) => setCurrentRole(e.target.value)}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d]  text-sm placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Job Title (e.g. Frontend Developer)"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             />
-            <input
-              type="text"
-              placeholder="Company"
+            <Input
               value={currentCompany}
               onChange={(e) => setCurrentCompany(e.target.value)}
-              className="w-64 h-10 px-3 py-1 placeholder:text-[12px] rounded-lg bg-[#eeeeee2d]  text-sm focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Company Name"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all duration-300"
             />
-            <input
-              type="text"
-              placeholder="Duration (e.g. Jan 2022 - Dec 2023)"
+            <Input
               value={currentDuration}
               onChange={(e) => setCurrentDuration(e.target.value)}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d] text-sm placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Duration (e.g. Jan 2022 - Present)"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             />
-            <button
+            <Button
               onClick={handleAddExperience}
-              className="bg-gray-800 text-[13px] font-medium text-[#81d1df] px-3 py-1 rounded-xl hover:bg-gray-700 cursor-pointer mt-3 mb-3 h-9 w-fit"
+              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300 w-fit"
+              size="sm"
             >
-              + Add Experience
-            </button>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Experience
+            </Button>
           </div>
 
-          {/* Display Added Experiences */}
-          <div className="flex w-100 flex-col gap-2">
+          <div className="space-y-3">
             {formData.experience.map((exp, index) => (
               <div
                 key={index}
-                className="bg-gray-800 px-4 py-2 rounded-xl flex justify-between items-center"
+                className="glassmorphic border border-white/20 p-4 rounded-lg flex justify-between items-start animate-scale-in"
               >
                 <div>
-                  <p className="font-medium">
-                    {exp.role} @ {exp.company}
-                  </p>
-                  <p className="text-sm text-gray-600">{exp.duration}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-200 ">
+                    {exp.role}
+                  </h3>
+                  <p className="text-sm text-gray-500">{exp.company}</p>
+                  <p className="text-xs text-gray-500">{exp.duration}</p>
                 </div>
                 <button
                   onClick={() => handleRemoveExperience(index)}
-                  className="text-red-500 cursor-pointer  hover:text-red-700 text-lg"
+                  className="text-red-400 hover:text-red-300 transition-colors"
                 >
-                  ×
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Education */}
-        
-        <h3 className="text-lg font-medium ml-3 mt-6">Education</h3>
-
-        <div className="ml-2 mt-2">
-          <div className="flex flex-col gap-2 mb-2">
-            <input
-              type="text"
-              placeholder="Degree (e.g. B.Tech, M.Sc)"
+      {/* Education */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200 tracking-wide">
+            🎓 Education
+          </CardTitle>
+          <p className="text-sm text-gray-500">
+            Add your educational background
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4">
+            <Input
               value={currentDegree}
               onChange={(e) => setCurrentDegree(e.target.value)}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d] text-sm placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Degree (e.g. Bachelor of Computer Science)"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             />
-            <input
-              type="text"
-              placeholder="Institution Name"
+            <Input
               value={currentInstitution}
               onChange={(e) => setCurrentInstitution(e.target.value)}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d] text-sm placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Institution Name"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             />
-            <input
-              type="text"
-              placeholder="Year (e.g. 2024)"
+            <Input
               value={currentYear}
               onChange={(e) => setCurrentYear(e.target.value)}
-              className="w-64 h-10 px-3 py-1 rounded-lg bg-[#eeeeee2d] text-sm placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-[#43b3c7]"
+              placeholder="Year (e.g. 2024)"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
             />
-            <button
+            <Button
               onClick={handleAddEducation}
-              className="bg-gray-800 text-[13px] font-medium text-[#81d1df] px-3 py-1 rounded-xl hover:bg-gray-700 cursor-pointer mt-3 mb-3  h-9 w-fit"
+              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300 w-fit"
+              size="sm"
             >
-              + Add Education
-            </button>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Education
+            </Button>
           </div>
 
-          {/* Show Added Educations */}
-          <div className="flex w-100 flex-col gap-2">
+          <div className="space-y-3">
             {formData.education.map((edu, index) => (
               <div
                 key={index}
-                className="bg-gray-800 px-4 py-2 rounded-md flex justify-between items-center"
+                className="glassmorphic border border-white/20 p-4 rounded-lg flex justify-between items-start animate-scale-in"
               >
                 <div>
-                  <p className="font-medium">
-                    {edu.degree} - {edu.institution}
-                  </p>
-                  <p className="text-sm text-gray-600">{edu.year}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-200 ">
+                    {edu.degree}
+                  </h3>
+                  <p className="text-sm text-gray-500">{edu.institution}</p>
+                  <p className="text-xs text-gray-500">{edu.year}</p>
                 </div>
                 <button
                   onClick={() => handleRemoveEducation(index)}
-                  className="text-red-500  cursor-pointer hover:text-red-700 text-lg"
+                  className="text-red-400 hover:text-red-300 transition-colors"
                 >
-                  ×
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Project */}
-
-        <h3 className="text-lg font-medium ml-3 mt-6">
-          Projects <span className="text-sm text-gray-500">(optional)</span>
-        </h3>
-
-        <div className="relative w-100 h-45 ml-2 mt-2">
-          {formData.projects.length === 0 && (
-            <div className="absolute top-1/2 left-1/2 text-[12px] text-gray-500 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center px-6">
-              Explain the projects if you have
-            </div>
-          )}
-
-          <textarea
+      {/* Projects */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+            🚀 Projects
+            <span className="text-sm text-gray-500 font-normal ml-2">
+              (optional)
+            </span>
+          </CardTitle>
+          <p className="text-sm text-gray-500">
+            Describe your notable projects
+          </p>
+        </CardHeader>
+        <CardContent>
+          <Textarea
             value={formData.projects}
             onChange={(e) =>
               setFormData({ ...formData, projects: e.target.value })
             }
-            className="bg-[#eeeeee2a] w-full h-full rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#43b3c7] overflow-auto
-resize-none text-gray-200"
+            placeholder="Describe your projects, achievements, and key accomplishments..."
+            className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 min-h-32 resize-none"
           />
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Social Links */}
-
-        <h3 className="text-lg font-medium ml-3 mt-6 mb-2">Social Links</h3>
-
-        <div className="ml-3">
-          {formData.socialLinks.map((link, idx) => (
-            <div key={idx} className="flex items-center mb-2 gap-2 text-sm">
-              <span className="bg-gray-800 px-2 py-1 rounded">
-                {link.platform}:
-              </span>
-              <a
-                href={link.url}
-                target="_blank"
-                className="text-blue-600 underline truncate"
-              >
-                {link.url}
-              </a>
-              <button onClick={() => handleRemove(idx)} className="text-s ml-2">
-                <i className="hover:bg-gray-800 cursor-pointer ri-delete-bin-6-fill"></i>
-              </button>
-            </div>
-          ))}
-
-          {showInput ? (
-            <div className="flex items-center gap-2 mt-2">
+      {/* Social Links */}
+      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
+            🔗 Social Links
+            <span className="text-sm text-gray-500 font-normal ml-2">
+              (optional)
+            </span>
+          </CardTitle>
+          <p className="text-sm text-gray-500">
+            Add your professional social profiles
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {showSocialInput ? (
+            <div className="flex gap-2">
               <select
                 value={currentPlatform}
                 onChange={(e) => setCurrentPlatform(e.target.value)}
-                className="cursor-pointer bg-gray-800 relative inline-flex items-center justify-center gap-2 rounded-md text-[13px] font-medium ring-offset-background transition-colors
-                disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-800 hover:text-[#81d1df] h-9 px-3"
+                className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  bg-gray-900 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
               >
-                <option value="">Platform</option>
+                <option value="">Select Platform</option>
                 <option value="LinkedIn">LinkedIn</option>
                 <option value="GitHub">GitHub</option>
-                <option value="Portfolio">Project</option>
                 <option value="Portfolio">Portfolio</option>
                 <option value="Twitter">Twitter</option>
               </select>
-              <input
-                type="url"
-                placeholder="Paste URL"
-                className="px-2 py-1 border rounded w-56 text-sm"
+              <Input
                 value={currentLink}
                 onChange={(e) => setCurrentLink(e.target.value)}
+                placeholder="Paste URL"
+                className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 flex-1"
               />
-              <button
-                onClick={handleAddLink}
-                className="bg-gray-800 text-[#81d1df]  px-3 py-1 rounded-xl hover:bg-gray-700 cursor-pointer text-[15px]"
+              <Button
+                onClick={handleAddSocialLink}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:scale-105 transition-all duration-300"
+                size="sm"
               >
                 Add
-              </button>
-              <button onClick={() => setShowInput(false)}>
-                {" "}
-                <i className="ri-close-line hover:text-red-700 text-red-500 cursor-pointer"></i>
-              </button>
+              </Button>
+              <Button
+                onClick={() => setShowSocialInput(false)}
+                variant="outline"
+                size="sm"
+                className="border-white/20 hover:bg-white/10"
+              >
+                <X className="w-4 h-4" />
+              </Button>
             </div>
           ) : (
-            <button
-              onClick={() => setShowInput(true)}
-              className="text-sm mt-2 cursor-pointer text-blue-600 underline"
+            <Button
+              onClick={() => setShowSocialInput(true)}
+              variant="outline"
+              className="border-white/20 hover:bg-white/10 text-blue-400 hover:text-blue-300"
             >
-              + Add Social Link
-            </button>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Social Link
+            </Button>
           )}
-        </div>
 
-        <button
-        disabled={downloading}
+          <div className="space-y-2">
+            {formData.socialLinks.map((link, idx) => (
+              <div
+                key={idx}
+                className="glassmorphic border border-white/20 p-3 rounded-lg flex justify-between items-center animate-scale-in"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-blue-500">
+                    {link.platform}:
+                  </span>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-500 hover:text-blue-500 transition-colors truncate"
+                  >
+                    {link.url}
+                  </a>
+                </div>
+                <button
+                  onClick={() => handleRemoveSocialLink(idx)}
+                  className="text-red-400 hover:text-red-300 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-          onClick={handleDownloadPDF}
-        className="mt-5 mb-10 ml-55 h-9 w-40 justify-center items-center group cursor-pointer relative inline-flex text-[14px] rounded-2xl bg-gray-700 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-1 hover:shadow-gray-600/30">
-          Save as PDF
-        </button>
+      {/* Download Button */}
+      <div className="flex justify-center pt-6">
+        <Button
+          onClick={() => exportToPDF(printRef.current)}
+          disabled={downloading}
+          className="bg-gradient-to-r from-blue-500 to-blue-800 hover:scale-105 transition-all duration-300 px-8 py-3 text-lg font-semibold"
+        >
+          {downloading ? (
+            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+          ) : (
+            <Download className="w-5 h-5 mr-2" />
+          )}
+          {downloading ? "Generating PDF..." : "Download Resume"}
+        </Button>
       </div>
     </div>
   );

@@ -176,3 +176,10 @@
       animation: scale-in 0.3s ease-out forwards;
     }
   }
+
+  @media(max-width: 800px) {
+    .logoutButton{
+      margin-right: 18%;
+      
+    }
+  }

@@ -1,20 +1,25 @@
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import UserLogout from './UserLogout';
 
 const Home = () => {
   const navigate = useNavigate();
 
   const handleResumeClick = () => {
-    navigate('/dashboard');
+    navigate('/resume-builder');
   };
 
   const handleInterviewClick = () => {
     navigate('/mock-interview');
   };
 
+  const handleLogout = () => {
+   navigate('/logout');
+  }
+
   return (
-    <div className="min-h-screen gradient-hero flex items-center justify-center p-6">
+    <div className="min-h-screen  gradient-hero flex items-center justify-center p-6">
       <div className="w-full max-w-4xl animate-fade-in">
         {/* Welcome Header */}
         <div className="text-center space-y-4 mb-12">
@@ -77,7 +82,17 @@ const Home = () => {
               </Button>
             </div>
           </Card>
+          
         </div>
+        <div className='logoutButton'>
+              <Button
+                onClick={handleLogout}
+                className="cursor-pointer gradient-button bg-gradient-to-r from-gray-700 to-gray-800 hover:scale-105 mt-10 ml-[44%] transition-smooth border-0 font-medium text-gray-300 shadow-xl"
+                size="lg"
+              >
+               Logout
+              </Button>
+          </div>
       </div>
     </div>
   );
