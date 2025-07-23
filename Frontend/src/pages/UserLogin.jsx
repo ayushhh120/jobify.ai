@@ -95,7 +95,7 @@ const UserLogin = () => {
   <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />
   Continue with Google
 </a>
-          <p className='text-center text-sm mr-20 mt-4'>New here? <Link to={'/signup'} className='text-blue-500'>Create new account</Link></p>
+          <p className='text-center text-sm mr-20 mt-4'>New here? <Link to={'/signup'} className='text-blue-500'>Create account</Link></p>
         </div>
                
       </div>
