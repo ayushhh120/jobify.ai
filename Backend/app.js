@@ -13,11 +13,10 @@ const authRoutes = require('./routes/auth.routes');
 
 
 
-const corsOptions = {
-  origin: 'https://jobify-ai-lovat.vercel.app',  
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'https://jobify-ai-lovat.vercel.app',
+  credentials: true
+}));
 
 
 connectDB();
