@@ -14,7 +14,7 @@ const authRoutes = require('./routes/auth.routes');
 
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin:  "https://jobify-ai-pe2b.onrender.com",
   credentials: true
 }));
 

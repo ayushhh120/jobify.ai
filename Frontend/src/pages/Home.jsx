@@ -87,7 +87,7 @@ const Home = () => {
         <div className='logoutButton'>
               <Button
                 onClick={handleLogout}
-                className="cursor-pointer gradient-button bg-gradient-to-r from-gray-700 to-gray-800 hover:scale-105 mt-10 ml-[44%] transition-smooth border-0 font-medium text-gray-300 shadow-xl"
+                className="cursor-pointer gradient-button bg-gradient-to-r from-gray-700 to-gray-800 hover:scale-105 mt-10 ml-28 transition-smooth border-0 font-medium text-gray-300 shadow-xl"
                 size="lg"
               >
                Logout

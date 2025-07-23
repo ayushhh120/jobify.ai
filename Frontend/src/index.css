@@ -113,11 +113,11 @@ textarea {
   }
 
   .signup-form-container h2{
-    font-size: 28px;
+    font-size: 1.7rem;
   }
 
   .signup-form-container h3{
-    font-size: 21px;
+    font-size: 1.3rem;
   }
 
   .sign-up-page input{
@@ -132,7 +132,6 @@ textarea {
     height: 100vh;
     background-color: #1118273b;
 
-    /* background-color: #1118273b */
   }
 
   .login-form-container{
@@ -140,7 +139,6 @@ textarea {
     height: 70%;
     width: 85%;
     margin-top: 90px;
-    margin-right: px;
     padding-left: 2px;
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
@@ -155,14 +153,14 @@ textarea {
 
 
   .login-form-container h2{
-    font-size: 33px;
+    font-size: 1.9rem;
     margin-top: 30px;
     height: 90px;
     margin-left: 10px;
   }
 
   .login-form-container h3{
-    font-size: 22px;
+    font-size: 1.2rem;
 
   }
 
@@ -174,7 +172,7 @@ textarea {
   }
 
   .login-up-page input::placeholder{
-    font-size: 15px;
+    font-size: 0.9rem;
  
   }
 
