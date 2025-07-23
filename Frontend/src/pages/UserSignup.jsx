@@ -46,7 +46,7 @@ const UserSignup = () => {
 
   return (
     <div className='sign-up-page h-screen w-screen bg-gray-800'>
-      <div className="signup-form-container flex bg-gray-900 text-white flex-col rounded-xl mx-auto mt-4 md:mt-9 max-w-sm md:max-w-md lg:max-w-lg px-4 md:px-0 md:absolute md:left-8 lg:left-35 glassmorphic card-glow transition-smooth hover:scale-102">
+      <div className="signup-form-container flex bg-gray-900 text-white flex-col rounded-xl mx-auto mt-4 md:mt-9 max-w-sm md:max-w-md lg:max-w-lg px-4 md:px-0 md:absolute md:left-8 lg:left-35 glassmorphic card-glow transition-smooth hover:scale-102 animate-fade-in">
         <h2 className='text-gray-400 text-xl md:text-2xl lg:text-3xl font-semibold text-center md:text-left px-4 md:px-15 mt-6 mb-6'>
           Hello, Welcome to  <span className='ml-1 text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-600 animate-fade-in'>jobify.ai</span>
         </h2>
