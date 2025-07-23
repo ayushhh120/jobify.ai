@@ -39,7 +39,7 @@ const [downloading, setDownloading] = useState(false);
       <div className='homeButton h-10 flex ml-[1%] items-center w-30 animate-fade-in'>
                               <Button
                                 onClick={handleHome}
-                                className="bg-gradient-to-r from-indigo-400 
+                                className="card-glow bg-gradient-to-r from-indigo-400 
                                 h-9 to-blue-800 hover:scale-105 
                                 gradient-button transition-smooth border-0 font-bold text-gray-200 w-10 shadow-xl cursor-pointer"
                                 size="lg"

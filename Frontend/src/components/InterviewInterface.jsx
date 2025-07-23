@@ -101,18 +101,23 @@ useEffect(() => {
 
       const data = await res.json();
         const transcript = data.transcript || "Could not transcribe audio. Please Try Again";
-        setUserAnswer(transcript);
-        showFeedback(false);
-      
-       setAllAnswers(prev => {
+setUserAnswer(transcript);
+
+// Only show feedback if transcription was successful
+if (transcript !== "Could not transcribe audio. Please Try Again") {
+  setAllAnswers(prev => {
     const updated = [...prev];
-    updated[currentQuestion] = data.transcript || "";
+    updated[currentQuestion] = transcript;
     return updated;
   });
 
-   const feedback = await fetchAIResponseFeedback(transcript || "");
-      setSampleFeedback(feedback);
-      setShowFeedback(true);
+  const feedback = await fetchAIResponseFeedback(transcript);
+  setSampleFeedback(feedback);
+  setShowFeedback(true);
+} else {
+  setShowFeedback(false);
+}
+
     };
 
     recorder.start();
@@ -349,7 +354,7 @@ const fetchAIResponseFeedback = async (text) => {
                 {isRecording ? (
                   <Square className="w-8 h-8 text-white" />
                 ) : (
-                  <Mic className="w-8 h-8 bg-gray-800/50" />
+                  <Mic className="w-8 h-8 bg-gray-700/50" />
                 )}
               </Button>
               <p className=" text-gray-500 text-sm">

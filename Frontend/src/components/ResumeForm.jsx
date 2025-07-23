@@ -309,7 +309,7 @@ const skillSuggestions = [
                 setFormData({ ...formData, name: e.target.value })
               }
               placeholder="Enter your full name"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
             />
           </div>
 
@@ -325,7 +325,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, email: e.target.value })
                 }
                 placeholder="your.email@example.com"
-                className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
               />
             </div>
             <div>
@@ -338,7 +338,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, phone: e.target.value })
                 }
                 placeholder="+91 8500110011"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
               />
             </div>
           </div>
@@ -354,7 +354,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, jobTitle: e.target.value })
                 }
                 placeholder="e.g. Frontend Developer"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
               />
             </div>
             <div>
@@ -367,7 +367,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, location: e.target.value })
                 }
                 placeholder="City, Country"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
               />
             </div>
           </div>
@@ -392,7 +392,7 @@ const skillSuggestions = [
                   value={currentSkill}
                   onChange={handleSkillInput}
                   placeholder="Type a skill..."
-                  className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                  className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                 />
 
                 {filteredSkills.length > 0 && (
@@ -473,7 +473,7 @@ const skillSuggestions = [
                 setFormData({ ...formData, summary: e.target.value })
               }
               placeholder={showPlaceholder ? "Write your professional summary or use AI to generate one, Job title and Skills fields are required to generate summary with AI" : ""}
-              className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 min-h-32 resize-none"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-50 transition-all duration-400min-h-32 resize-none"
             />
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
@@ -504,23 +504,23 @@ const skillSuggestions = [
               value={currentRole}
               onChange={(e) => setCurrentRole(e.target.value)}
               placeholder="Job Title (e.g. Frontend Developer)"
-              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <Input
               value={currentCompany}
               onChange={(e) => setCurrentCompany(e.target.value)}
               placeholder="Company Name"
-              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all duration-300"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all duration-300"
             />
             <Input
               value={currentDuration}
               onChange={(e) => setCurrentDuration(e.target.value)}
               placeholder="Duration (e.g. Jan 2022 - Present)"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <Button
               onClick={handleAddExperience}
-              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300 w-fit"
+              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-400w-fit"
               size="sm"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -569,23 +569,23 @@ const skillSuggestions = [
               value={currentDegree}
               onChange={(e) => setCurrentDegree(e.target.value)}
               placeholder="Degree (e.g. Bachelor of Computer Science)"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <Input
               value={currentInstitution}
               onChange={(e) => setCurrentInstitution(e.target.value)}
               placeholder="Institution Name"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <Input
               value={currentYear}
               onChange={(e) => setCurrentYear(e.target.value)}
               placeholder="Year (e.g. 2024)"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <Button
               onClick={handleAddEducation}
-              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-300 w-fit"
+              className="bg-gradient-to-r from-purple-500 to-blue-800 hover:scale-105 transition-all duration-400w-fit"
               size="sm"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -638,7 +638,7 @@ const skillSuggestions = [
               setFormData({ ...formData, projects: e.target.value })
             }
             placeholder="Describe your projects, achievements, and key accomplishments..."
-            className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 min-h-32 resize-none"
+            className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 min-h-32 resize-none"
           />
         </CardContent>
       </Card>
@@ -674,7 +674,7 @@ const skillSuggestions = [
                 value={currentLink}
                 onChange={(e) => setCurrentLink(e.target.value)}
                 placeholder="Paste URL"
-                className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 flex-1"
+                className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400flex-1"
               />
               <Button
                 onClick={handleAddSocialLink}
@@ -739,7 +739,7 @@ const skillSuggestions = [
         <Button
           onClick={() => exportToPDF(printRef.current)}
           disabled={downloading}
-          className="bg-gradient-to-r from-blue-500 to-blue-800 hover:scale-105 transition-all duration-300 px-8 py-3 text-lg font-semibold"
+          className="bg-gradient-to-r from-blue-500 to-blue-800 hover:scale-105 transition-all duration-400px-8 py-3 text-lg font-semibold card-glow"
         >
           {downloading ? (
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />

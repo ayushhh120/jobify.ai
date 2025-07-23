@@ -45,7 +45,7 @@ Strictly follow these rules:
       {
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "http://localhost:5173/",
+          "HTTP-Referer": "https://jobify-ai-lovat.vercel.app/",
           "Content-Type": "application/json",
         },
       }
