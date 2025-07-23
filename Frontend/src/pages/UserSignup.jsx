@@ -56,7 +56,7 @@ const UserSignup = () => {
             <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-4'>Enter your name</h3>
             <div className='flex gap-4 mt-3'>
               <input 
-                className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full sm:w-32 md:w-30 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 text-base placeholder:text-xs'
+                className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full sm:w-32 md:w-30 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 text-base placeholder:text-xs'
                 type="text" 
                 required 
                 value={firstName}
@@ -64,7 +64,7 @@ const UserSignup = () => {
                 placeholder='Firstname'
               />
               <input 
-                className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full sm:w-32 md:w-30 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 text-base placeholder:text-xs'
+                className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full sm:w-32 md:w-30 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 text-base placeholder:text-xs'
                 type="text" 
                 required 
                 value={lastName}
@@ -75,7 +75,7 @@ const UserSignup = () => {
             
             <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-6'>Enter your email</h3>
             <input 
-              className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 mt-2 text-base placeholder:text-xs'
+              className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 mt-2 text-base placeholder:text-xs'
               type="email" 
               required
               value={email}
@@ -85,7 +85,7 @@ const UserSignup = () => {
            
             <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-6'>Create new password</h3>
             <input 
-              className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300 mt-2 text-base placeholder:text-xs'
+              className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 mt-2 text-base placeholder:text-xs'
               type="password" 
               required 
               value={password}
