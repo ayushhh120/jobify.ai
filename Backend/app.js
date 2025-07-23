@@ -14,7 +14,7 @@ const authRoutes = require('./routes/auth.routes');
 
 
 app.use(cors({
-  origin: 'https://jobify-ai-lovat.vercel.app',
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 

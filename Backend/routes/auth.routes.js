@@ -16,7 +16,7 @@ router.get(
     });
 
    
-    res.redirect(`https://jobify-ai-lovat.vercel.app/google-success?token=${token}`);
+    res.redirect(`${process.env.CLIENT_URL}/google-success?token=${token}`);
   }
 );
 
