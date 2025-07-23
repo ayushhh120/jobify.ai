@@ -73,7 +73,7 @@ const UserLogin = () => {
        
        <h3 className='text-xl text-gray-300 font-medium ml-2 mt-6'>Enter your password</h3>
         <input className='bg-[#eeeeee2d] w-63 pl-2 px-1 py-1 ml-2 mt-2 rounded text-base placeholder:text-[12px] focus:outline-none focus:ring-2 focus:ring-purple-300 transition-all duration-300'
-         type="text" required 
+         type="password" required 
         value={password}
         onChange={(e)=>{
           setPassword(e.target.value)  
