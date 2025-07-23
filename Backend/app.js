@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
-    res.send("Hellow World")
+    res.send("Hello World")
 })
 
 app.use('/user', userRoutes)
