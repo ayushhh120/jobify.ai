@@ -99,7 +99,7 @@ const UserSignup = () => {
           </form> 
           
           <a
-            href="http://localhost:3000/auth/google"
+            href="https://jobify-ai-pe2b.onrender.com/auth/google"
             className="mt-5 w-full md:w-55 cursor-pointer text-black flex gap-2 items-center justify-center bg-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-zinc-300 transition-all ease-in duration-200"
           >
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />
