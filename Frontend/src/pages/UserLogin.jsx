@@ -57,7 +57,7 @@ const UserLogin = () => {
 
         <h2 className='text-xl md:text-2xl lg:text-3xl font-semibold text-center md:text-left px-4 md:px-15 mt-8 bg-gradient-to-r from-blue-200 to-indigo-500 text-transparent bg-clip-text '>Hello, Welcome back :)</h2>
 
-        <div className="login-form-2 w-110 pt-20 bg-gray-900 text-gray-100 h-120 pl-25 mb-5 rounded-xl">
+        <div className="login-form-2 pt-20 bg-gray-900 text-gray-100 h-120 pl-25 mb-5 rounded-xl">
 
           <form onSubmit={(e)=>{
         submitHandler(e)
@@ -89,7 +89,7 @@ const UserLogin = () => {
 </form>
 
 <a
-  href="https://jobify-ai-pe2b.onrender.com/auth/google"
+  href="https://jobify-ai-pe2b.onrender.com/auth/google/callback"
   className="ml-6 mt-5 w-55 cursor-pointer text-black flex gap-2 items-center bg-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-zinc-300 transition-all ease-in duration-200"
 >
   <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />

@@ -12,16 +12,11 @@ const UserLogout = () => {
         Authorization: `Bearer ${token}`
       },
       withCredentials: true
-    }).then((response) => {
-      if (response.status === 200) {
-        localStorage.removeItem('token')
-        navigate('/login')
-      }
-    }).catch((err) => {
-      console.error('Logout failed:', err)
-      navigate('/login')
-    })
-  }, [])
+    }).finally(() => {
+      localStorage.removeItem('token');
+      navigate('/login');
+    });
+  }, []);
 
   return (
     <div>Logging out...</div>

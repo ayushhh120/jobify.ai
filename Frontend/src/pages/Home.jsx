@@ -19,14 +19,14 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen  gradient-hero flex items-center justify-center p-6">
-      <div className="w-full max-w-4xl animate-fade-in">
+    <div className="min-h-screen w-full mx-auto gradient-hero flex items-center justify-center p-6">
+      <div className="w-full h-auto max-w-4xl animate-fade-in">
         {/* Welcome Header */}
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-4xl text-gray-300 md:text-5xl font-bold text-foreground animate-scale-in">
             👋 Welcome,
           </h1>
-          <p className="text-xl text-muted-foreground text-gray-400 animate-fade-in delay-100">
+          <p className="text-lg text-gray-400 animate-fade-in delay-100">
             What would you like to do today?
           </p>
         </div>
@@ -84,10 +84,10 @@ const Home = () => {
           </Card>
           
         </div>
-        <div className='logoutButton'>
+        <div>
               <Button
                 onClick={handleLogout}
-                className="cursor-pointer gradient-button bg-gradient-to-r from-gray-700 to-gray-800 hover:scale-105 mt-10 ml-28 transition-smooth border-0 font-medium text-gray-300 shadow-xl"
+                className="logoutButton cursor-pointer gradient-button bg-gradient-to-r from-gray-700 to-gray-800 hover:scale-105 mt-10 ml-30  lg:ml-97 md:ml-80  transition-smooth border-0 font-medium text-gray-300 shadow-xl"
                 size="lg"
               >
                Logout

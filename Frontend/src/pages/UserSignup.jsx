@@ -45,15 +45,15 @@ const UserSignup = () => {
   };
 
   return (
-    <div className='sign-up-page h-screen w-screen bg-gray-800'>
-      <div className="signup-form-container flex bg-gray-900 text-white flex-col rounded-xl mx-auto mt-4 md:mt-9 max-w-sm md:max-w-md lg:max-w-lg px-4 md:px-0 md:absolute md:left-8 lg:left-35 glassmorphic card-glow transition-smooth hover:scale-102 animate-fade-in">
+    <div className='sign-up-page min-h-screen min-w-screen  bg-gray-800'>
+      <div className="signup-form-container flex bg-gray-900 text-white flex-col rounded-xl mx-auto mt-10 max-w-sm md:max-w-md lg:max-w-lg px-4 md:px-0 md:absolute md:left-8 lg:left-35 glassmorphic card-glow transition-smooth hover:scale-102 animate-fade-in">
         <h2 className='text-gray-400 text-xl md:text-2xl lg:text-3xl font-semibold text-center md:text-left px-4 md:px-15 mt-6 mb-6'>
           Hello, Welcome to  <span className='ml-1 text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-600 animate-fade-in'>jobify.ai</span>
         </h2>
 
         <div className="bg-gray-900 text-gray-100 px-6 md:px-25 pb-6 rounded-xl">
           <form onSubmit={submitHandler}>
-            <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-4'>Enter your name</h3>
+            <h3 className='text-lg text-gray-300 font-medium mt-4'>Enter your name</h3>
             <div className='flex gap-4 mt-3'>
               <input 
                 className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full sm:w-32 md:w-30 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 text-base placeholder:text-xs'
@@ -73,7 +73,7 @@ const UserSignup = () => {
               />
             </div>
             
-            <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-6'>Enter your email</h3>
+            <h3 className='text-lg  text-gray-300 font-medium mt-6'>Enter your email</h3>
             <input 
               className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 mt-2 text-base placeholder:text-xs'
               type="email" 
@@ -83,7 +83,7 @@ const UserSignup = () => {
               placeholder='Email'
             />
            
-            <h3 className='text-lg md:text-xl text-gray-300 font-medium mt-6'>Create new password</h3>
+            <h3 className='text-lg text-gray-300 font-medium mt-6'>Create new password</h3>
             <input 
               className='bg-gray-700 bg-opacity-30 backdrop-blur-sm w-full md:w-63 px-3 py-2 h-9 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 mt-2 text-base placeholder:text-xs'
               type="password" 
@@ -99,7 +99,7 @@ const UserSignup = () => {
           </form> 
           
           <a
-            href="https://jobify-ai-pe2b.onrender.com/auth/google"
+            href="https://jobify-ai-pe2b.onrender.com/auth/google/callback"
             className="mt-5 w-full md:w-55 cursor-pointer text-black flex gap-2 items-center justify-center bg-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-zinc-300 transition-all ease-in duration-200"
           >
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />

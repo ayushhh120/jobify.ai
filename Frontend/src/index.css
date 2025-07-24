@@ -94,6 +94,7 @@ textarea {
    }
 }
 
+
 @media(max-width: 800px){
 
    .image-container{
@@ -117,7 +118,7 @@ textarea {
   }
 
   .signup-form-container h3{
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .sign-up-page input{
@@ -128,17 +129,13 @@ textarea {
 
   .login-up-page{
     position: absolute;
-    width: 100vw;
-    height: 100vh;
     background-color: #1118273b;
 
   }
 
   .login-form-container{
     position: static;
-    height: 70%;
-    width: 85%;
-    margin-top: 90px;
+    width: 90%;
     padding-left: 2px;
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
@@ -146,7 +143,7 @@ textarea {
   }
 
   .login-form-2{
-    width: 96%;
+    
     padding-left: 3%;
     margin-left: 5%;
   }
@@ -179,11 +176,14 @@ textarea {
  .login-up-page button{
   margin-top: 30px;
   margin-left: 10px;
+  width: 90%;
  }
 
  .login-form-container a{
-  margin-left: 29px;
+  margin-left: 24px;
   margin-top: 19px;
+  width: 80%;
+  height: 10%;
  }
 
  .login-form-container p{
@@ -201,6 +201,37 @@ textarea {
   top: 25px;
  }
 
+ .resumeBuilder{
+  grid-template-columns: 1fr;
+ }
 
 
+}
+@media (max-width: 360px) {
+  .logoutButton{
+    margin-left: 100px;
+
+  }
+
+  .login-form-container{
+    position: static;
+    width: 90%;
+    padding-left: 2px;
+    margin-top: 40px;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
+  }
+
+  .signup-form-container{
+    position: static;
+    width: 90%;
+    height: 100%;
+    margin-left: 18px;
+    padding-left: 2px;
+    margin-top: 40px;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
+  }
 }

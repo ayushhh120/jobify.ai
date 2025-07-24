@@ -101,6 +101,7 @@ const skillSuggestions = [
   "Network Security",  
   "Cryptography",  
   "OWASP",  
+  "Linux",
   "Cybersecurity Fundamentals",
 
   // 📱 Mobile App Development
@@ -289,7 +290,7 @@ const skillSuggestions = [
 
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 h-auto w-full animate-fade-in">
       {/* Personal Details */}
       <Card className="glassmorphic card-glow border-0 rounded-2xl">
         <CardHeader>

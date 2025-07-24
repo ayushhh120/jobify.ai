@@ -35,8 +35,8 @@ const [downloading, setDownloading] = useState(false);
 
   
   return (
-    <div className="min-h-screen gradient-hero p-6">
-      <div className='homeButton h-10 flex ml-[1%] items-center w-30 animate-fade-in'>
+    <div className="min-h-screen w-full gradient-hero p-5 sm:p-5 overflow-x-hidden">
+      <div className='homeButton flex ml-[1%] items-center h-auto animate-fade-in'>
                               <Button
                                 onClick={handleHome}
                                 className="card-glow bg-gradient-to-r from-indigo-400 
@@ -47,8 +47,8 @@ const [downloading, setDownloading] = useState(false);
                               <i className="ri-home-line"></i>
                               </Button>
                               </div>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 animate-fade-in">
+      <div className="w-full mx-auto">
+        <div className="text-center w-full mb-8 animate-fade-in">
           
           <h1 className="text-4xl font-bold text-gray-200 mb-2">
             📄 AI Resume Builder
@@ -58,9 +58,11 @@ const [downloading, setDownloading] = useState(false);
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="resumeBuilder grid grid-cols-2 sM:grid-cols-1 gap-8 w-full max-w-[1300px] mx-auto">
+          <div className='w-full'>
           <ResumeForm formData={formData} setFormData={setFormData} printRef={printRef} downloading={downloading} />
-
+          </div>
+  
           <div className="glassmorphic h-fit card-glow animate-fade-in rounded-3xl">
             <div className="p-6">
               <h2 className="text-xl font-bold text-gray-300 mb-4">📋 Resume Preview</h2>

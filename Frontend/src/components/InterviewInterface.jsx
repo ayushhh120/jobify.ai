@@ -257,17 +257,17 @@ const fetchAIResponseFeedback = async (text) => {
 // Welcome screen
   if (!interviewStarted) {
     return (
-      <div className="min-h-screen gradient-hero flex items-center justify-center p-6">
-        <div className="w-full max-w-xl text-center space-y-8 animate-fade-in">
+      <div className="min-h-screen w-full gradient-hero flex items-center justify-center p-6">
+        <div className="w-full h-auto max-w-xl text-center space-y-8 animate-fade-in">
           {/* Hero Section */}
           <div className="space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-400">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-400">
               Ace Your Next
               <span className="block text-transparent bg-gradient-to-r from-blue-300 to-purple-800 bg-clip-text">
                 Interview!
               </span>
             </h1>
-            <p className="text-xl  text-gray-500 max-w-md mx-auto leading-relaxed">
+            <p className="text-lg  text-gray-500 max-w-md mx-auto leading-relaxed">
               Practice with AI. Get smart feedback. Boost your confidence.
             </p>
           </div>
@@ -276,7 +276,7 @@ const fetchAIResponseFeedback = async (text) => {
           <Card className="glassmorphic p-8 card-glow animate-scale-in">
             <div className="space-y-6">
               <div className="w-20 h-20 mx-auto gradient-button rounded-full flex items-center justify-center shadow-lg">
-                <Mic className="w-8 h-8 bg-gray-800/50" />
+                <Mic className="w-8 h-8 bg-gray-700/50" />
               </div>
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-400">Ready to begin?</h3>
@@ -318,7 +318,7 @@ const fetchAIResponseFeedback = async (text) => {
         </div>
 
         {/* Question Box */} 
-        <Card className="glassmorphic p-8 card-glow animate-scale-in">
+        <Card className="glassmorphic p-6 card-glow animate-scale-in">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
@@ -330,7 +330,7 @@ const fetchAIResponseFeedback = async (text) => {
   </div>
 ) : (
   questions.length > 0 && (
-    <h2 className="text-2xl font-semibold text-gray-400 leading-relaxed">
+    <h2 className="text-xl font-semibold text-gray-400 leading-relaxed">
       {questions[currentQuestion]}
     </h2>
   )
@@ -375,20 +375,20 @@ const fetchAIResponseFeedback = async (text) => {
 
         {/* Feedback Section */}
         {showFeedback && (
-          <Card className="glassmorphic p-8 card-glow animate-scale-in">
-            <div className="space-y-6">
+          <Card className="glassmorphic w-full p-5 card-glow animate-scale-in">
+            <div className="space-y-6 w-full">
               <h3 className="text-xl font-semibold text-gray-400">AI Feedback</h3>
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-1 w-full max-w-[1300px] mx-auto gap-4">
                 {sampleFeedback.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-4 bg-gray-800 /30 rounded-lg border border-gray-700">
                     <div className="space-y-1">
                       <div className="flex items-center space-x-3">
-                        <span className="font-medium text-gray-400">{item.category}</span>
-                        <span className="text-2xl">{getScoreStars(item.score, item.maxScore)}</span>
+                        <span className="font-medium text-sm lg:text-lg text-gray-400">{item.category}</span>
+                        <span className="text-xl lg:text-2xl">{getScoreStars(item.score, item.maxScore)}</span>
                       </div>
-                      <p className="text-sm  text-gray-500">{item.feedback}</p>
+                      <p className="text-sm text-gray-500">{item.feedback}</p>
                     </div>
-                    <div className={`text-lg font-semibold ${getScoreColor(item.color)}`}>
+                    <div className={`text-md lg:text-lg mr-1 font-semibold ${getScoreColor(item.color)}`}>
                       {item.score}/{item.maxScore}
                     </div>
                   </div>
@@ -435,7 +435,7 @@ const fetchAIResponseFeedback = async (text) => {
                   <div className="text-sm  text-gray-500">Performance</div>
                 </div>
               </div>
-              {finalSummary ? (
+              {finalSummary && finalSummary.trim() != "" ?(
   <p className="text-gray-400 leading-relaxed whitespace-pre-wrap max-w-md mx-auto">
     {finalSummary}
   </p>
