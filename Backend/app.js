@@ -12,9 +12,16 @@ const authRoutes = require('./routes/auth.routes');
 
 
 
+const allowedOrigins = ["https://jobify-ai-lovat.vercel.app"];
 
 app.use(cors({
-  origin:  "https://jobify-ai-lovat.vercel.app/",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
