@@ -474,7 +474,7 @@ const skillSuggestions = [
                 setFormData({ ...formData, summary: e.target.value })
               }
               placeholder={showPlaceholder ? "Write your professional summary or use AI to generate one, Job title and Skills fields are required to generate summary with AI" : ""}
-              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-50 transition-all duration-400min-h-32 resize-none"
+              className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400 min-h-45 resize-none"
             />
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
@@ -657,13 +657,13 @@ const skillSuggestions = [
             Add your professional social profiles
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 ">
           {showSocialInput ? (
-            <div className="flex gap-2">
+            <div className="socialLinks flex flex-row  gap-2">
               <select
                 value={currentPlatform}
                 onChange={(e) => setCurrentPlatform(e.target.value)}
-                className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  bg-gray-900 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+                className="glassmorphic border-white/20 text-gray-900 dark:text-gray-200  bg-gray-900 text-sm px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
               >
                 <option value="">Select Platform</option>
                 <option value="LinkedIn">LinkedIn</option>
@@ -679,7 +679,7 @@ const skillSuggestions = [
               />
               <Button
                 onClick={handleAddSocialLink}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:scale-105 transition-all cursor-pointer duration-300"
                 size="sm"
               >
                 Add
@@ -688,9 +688,9 @@ const skillSuggestions = [
                 onClick={() => setShowSocialInput(false)}
                 variant="outline"
                 size="sm"
-                className="border-white/20 hover:bg-white/10"
+                className="border-white/20 hover:bg-white/10 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 text-red-500 hover:text-red-700 h-4" />
               </Button>
             </div>
           ) : (

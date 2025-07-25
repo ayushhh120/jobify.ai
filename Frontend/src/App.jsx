@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotFound from './pages/NotFound'
 import ResumeForm from './components/ResumeForm'
 import UserLogout from './pages/UserLogout'
+import GoogleSuccess from './pages/GoogleSuccess'
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ function App() {
 return(
 <div>
     <Routes>
+      <Route path='/google-success' element={<GoogleSuccess/>}/>
        <Route path='/signup' element={<UserSignup/>} />
        <Route path='/login' element={<UserLogin/>} />
        <Route

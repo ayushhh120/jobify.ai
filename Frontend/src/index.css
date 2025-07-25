@@ -95,7 +95,7 @@ textarea {
 }
 
 
-@media(max-width: 800px){
+@media(max-width: 900px){
 
    .image-container{
     display: none;
@@ -180,17 +180,21 @@ textarea {
  }
 
  .login-form-container a{
-  margin-left: 24px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 19px;
-  width: 80%;
-  height: 10%;
+  width: 90%;
+  height: 9%;
  }
 
  .login-form-container p{
   width: 80%;
+  margin-top: 12px;
   margin-left: 8%;
   display: block;
- }
+   }
 
  .homeButton{
   margin-top: 8px;
@@ -206,6 +210,13 @@ textarea {
 
  }
 
+ .socialLinks{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+ }
+
 
 }
 @media (max-width: 360px) {
@@ -218,7 +229,7 @@ textarea {
     position: static;
     width: 90%;
     padding-left: 2px;
-    margin-top: 40px;
+    margin-top: 52px;
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
     box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
@@ -230,7 +241,7 @@ textarea {
     height: 100%;
     margin-left: 18px;
     padding-left: 2px;
-    margin-top: 40px;
+    margin-top: 50px;
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
     box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)

@@ -89,13 +89,16 @@ const UserLogin = () => {
 </form>
 
 <a
-  href="https://jobify-ai-pe2b.onrender.com/auth/google/callback"
+  href="https://jobify-ai-pe2b.onrender.com/auth/google"
   className="ml-6 mt-5 w-55 cursor-pointer text-black flex gap-2 items-center bg-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-zinc-300 transition-all ease-in duration-200"
 >
   <img src="https://developers.google.com/identity/images/g-logo.png" alt="google" className="w-5 h-5" />
   Continue with Google
 </a>
-          <p className='text-center text-sm mr-20 mt-4'>New here? <Link to={'/signup'} className='text-blue-500'>Create account</Link></p>
+         
+           <p className='text-center mr-27 text-md mt-4'>New here? <span>
+            <Link to={'/signup'} className='text-blue-500'>Create account</Link>
+            </span> </p>
         </div>
                
       </div>
