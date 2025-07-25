@@ -135,15 +135,16 @@ textarea {
 
   .login-form-container{
     position: static;
-    width: 90%;
+    width: 87%;
     padding-left: 2px;
+    margin-top: 83px;
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
     box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
   }
 
   .login-form-2{
-    
+    height: 100%;
     padding-left: 3%;
     margin-left: 5%;
   }
