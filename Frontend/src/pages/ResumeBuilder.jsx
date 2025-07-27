@@ -58,7 +58,7 @@ const [downloading, setDownloading] = useState(false);
           </p>
         </div>
 
-        <div className="resumeBuilder grid grid-cols-2 sM:grid-cols-1 gap-8 w-full max-w-[1300px] mx-auto">
+        <div className="resumeBuilder grid grid-cols-2 sm:grid-cols-1 gap-8 w-full max-w-[1300px] mx-auto">
           <div className='w-full'>
           <ResumeForm formData={formData} setFormData={setFormData} printRef={printRef} downloading={downloading} />
           </div>

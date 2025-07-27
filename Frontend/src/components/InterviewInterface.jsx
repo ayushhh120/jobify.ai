@@ -1,12 +1,13 @@
 
 
 import { useState, useEffect } from 'react';
-import { Mic, MicOff, Play, Square, RotateCcw } from 'lucide-react';
+import { Mic, MicOff, Play, Square, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import axios from 'axios'
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 
 
@@ -25,11 +26,64 @@ const [mediaRecorder, setMediaRecorder] = useState(null);
 const [audioChunks, setAudioChunks] = useState([]);
 const [sampleFeedback, setSampleFeedback] = useState([]);
 const [allAnswers, setAllAnswers] = useState([]);
+const [allFeedback, setAllFeedback] = useState([]); // Store feedback for all questions
 const [finalSummary, setFinalSummary] = useState("");
 const [loadingQuestions, setLoadingQuestions] = useState(false);
+const [overallScore, setOverallScore] = useState(0);
+const [confidenceLevel, setConfidenceLevel] = useState(0);
+const [performanceRating, setPerformanceRating] = useState("");
+const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(true);
+const [speechSupported, setSpeechSupported] = useState(false);
+
+
+
+// Check if speech synthesis is supported
+useEffect(() => {
+  const isSupported = 'speechSynthesis' in window;
+  setSpeechSupported(isSupported);
+  console.log('Speech synthesis supported:', isSupported);
+  
+  if (isSupported) {
+    console.log('Available voices:', speechSynthesis.getVoices());
+  }
+}, []);
+
+// Auto-speak when question changes
+useEffect(() => {
+  if (textToSpeechEnabled && questions.length > 0 && currentQuestion < questions.length) {
+    const currentQuestionText = questions[currentQuestion];
+    if (currentQuestionText && window.speechSynthesis) {
+      // Cancel any existing speech
+      speechSynthesis.cancel();
+      
+      // Create new utterance
+      const utterance = new SpeechSynthesisUtterance(currentQuestionText);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      
+      // Get available voices and select a good one
+      const voices = speechSynthesis.getVoices();
+      const preferredVoice = voices.find(voice => 
+        voice.lang === 'en-US' && 
+        (voice.name.includes('Google') || voice.name.includes('Natural') || voice.name.includes('Premium'))
+      );
+      
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+      
+      // Speak the question
+      console.log('Auto-speaking question:', currentQuestionText);
+      speechSynthesis.speak(utterance);
+    }
+  }
+}, [currentQuestion, questions, textToSpeechEnabled]);
 
  
 
+// Generate interview questions from AI
 useEffect(() => {
   setIsFormValid(jobTitle.trim() !== "" && skills.trim() !== "");
 }, [jobTitle, skills]);
@@ -40,6 +94,11 @@ useEffect(() => {
   setUserAnswer('');
   setQuestions([]);
   setAllAnswers([]);
+  setAllFeedback([]);
+  setFinalSummary("");
+  setOverallScore(0);
+  setConfidenceLevel(0);
+  setPerformanceRating("");
 
   try {
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-questions`, {
@@ -47,6 +106,9 @@ useEffect(() => {
       skills: skills.split(",").map(skill => skill.trim())
     });
     setQuestions(res.data.questions);
+    // Initialize arrays with the correct length
+    setAllAnswers(new Array(res.data.questions.length).fill(""));
+    setAllFeedback(new Array(res.data.questions.length).fill([]));
   } catch (error) {
     console.error("Failed to fetch questions", error);
     alert("Error generating questions. Please try again.");
@@ -62,13 +124,22 @@ useEffect(() => {
     setCurrentQuestion(0);
     setShowFeedback(false);
     setUserAnswer('');
+    setAllAnswers([]);
+    setAllFeedback([]);
+    setFinalSummary("");
+    setOverallScore(0);
+    setConfidenceLevel(0);
+    setPerformanceRating("");
     
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-questions`, {
-      jobTitle: "Frontend Developer",
-      skills: ["React", "JavaScript", "Tailwind"]
+      jobTitle: jobTitle,
+      skills: skills
     });
 
     setQuestions(res.data.questions);
+    // Initialize arrays with the correct length
+    setAllAnswers(new Array(res.data.questions.length).fill(""));
+    setAllFeedback(new Array(res.data.questions.length).fill([]));
   } catch (error) {
     console.error("Failed to fetch questions", error);
     alert("Something went wrong while fetching interview questions.");
@@ -79,10 +150,30 @@ useEffect(() => {
   };
 
  
+const QuestionBox = ({ question }) => {
+  const { stopSpeech } = useTextToSpeech(question, textToSpeechEnabled); 
 
+  return (
+    <div className="text-lg font-medium mb-4">
+      <div className="flex items-center space-x-2">
+        {textToSpeechEnabled && (
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+        )}
+        <span>{question}</span>
+      </div>
+    </div>
+  );
+};
 
+// start recording
  const handleRecordToggle = async () => {
   if (!isRecording) {
+    // Stop any current text-to-speech when starting recording
+    if (window.speechSynthesis) {
+      speechSynthesis.cancel();
+      console.log("Stopped text-to-speech for recording");
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     console.log("Mic access granted");
     const recorder = new MediaRecorder(stream);
@@ -113,7 +204,19 @@ if (transcript !== "Could not transcribe audio. Please Try Again") {
 
   const feedback = await fetchAIResponseFeedback(transcript);
   setSampleFeedback(feedback);
+  
+  // Store feedback for this question
+  setAllFeedback(prev => {
+    const updated = [...prev];
+    updated[currentQuestion] = feedback;
+    return updated;
+  });
+  
   setShowFeedback(true);
+  
+  // Debug log to track answers
+  console.log(`Answer ${currentQuestion + 1} saved:`, transcript);
+  console.log("All answers so far:", [...allAnswers.slice(0, currentQuestion), transcript]);
 } else {
   setShowFeedback(false);
 }
@@ -135,6 +238,7 @@ if (transcript !== "Could not transcribe audio. Please Try Again") {
   }
 };
 
+// Fetch AI Feedback
 const fetchAIResponseFeedback = async (text) => {
   try {
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-feedback`, {
@@ -147,6 +251,7 @@ const fetchAIResponseFeedback = async (text) => {
   }
 };
 
+// Next question
   const handleNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
     setCurrentQuestion(currentQuestion + 1);
@@ -158,9 +263,9 @@ const fetchAIResponseFeedback = async (text) => {
   const getScoreColor = (color) => {
     switch (color) {
       case 'success': return 'text-green-500';
-      case 'warning': return 'border-yellow-500';
+      case 'warning': return 'text-yellow-500';
       case 'destructive': return 'text-red-500';
-      default: return ' text-gray-500';
+      default: return 'text-gray-500';
     }
   };
 
@@ -168,21 +273,113 @@ const fetchAIResponseFeedback = async (text) => {
     return '⭐'.repeat(score) + '☆'.repeat(maxScore - score);
   };
 
+  // Calculate overall performance metrics
+  const calculatePerformanceMetrics = (feedbackArray) => {
+    if (!feedbackArray || feedbackArray.length === 0) return { overallScore: 0, confidenceLevel: 0, performanceRating: "" };
+
+    let totalScore = 0;
+    let totalMaxScore = 0;
+    let confidenceScores = [];
+    let clarityScores = [];
+    let relevanceScores = [];
+
+    feedbackArray.forEach(questionFeedback => {
+      questionFeedback.forEach(feedback => {
+        totalScore += feedback.score;
+        totalMaxScore += feedback.maxScore;
+
+        // Categorize scores for specific metrics
+        if (feedback.category.toLowerCase().includes('confidence')) {
+          confidenceScores.push(feedback.score);
+        } else if (feedback.category.toLowerCase().includes('clarity')) {
+          clarityScores.push(feedback.score);
+        } else if (feedback.category.toLowerCase().includes('relevance')) {
+          relevanceScores.push(feedback.score);
+        }
+      });
+    });
+
+    // Calculate overall score (average of all scores)
+    const overallScore = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 5 * 10) / 10 : 0;
+
+    // Calculate confidence level (average of confidence scores)
+    const avgConfidence = confidenceScores.length > 0 
+      ? confidenceScores.reduce((sum, score) => sum + score, 0) / confidenceScores.length 
+      : 0;
+    const confidenceLevel = Math.round((avgConfidence / 5) * 100);
+
+    // Determine performance rating based on overall score
+    let performanceRating = "";
+    if (overallScore >= 4.5) {
+      performanceRating = "Excellent";
+    } else if (overallScore >= 3.5) {
+      performanceRating = "Good";
+    } else if (overallScore >= 2.5) {
+      performanceRating = "Average";
+    } else if (overallScore >= 1.5) {
+      performanceRating = "Needs Improvement";
+    } else {
+      performanceRating = "Poor";
+    }
+
+    return { overallScore, confidenceLevel, performanceRating };
+  };
+
   useEffect(() => {
   const fetchFinalSummary = async () => {
-    if (currentQuestion === 4 && showFeedback) {
+    
+    if (currentQuestion === questions.length - 1 && showFeedback && allAnswers.length >= questions.length) {
       try {
-        const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-summary`, {
-          answers: allAnswers,
-        });
-        setFinalSummary(res.data.summary);
+        // Filter out any undefined or empty answers and ensure we have exactly 5 answers
+        const validAnswers = allAnswers.slice(0, questions.length).filter(answer => answer && answer.trim() !== "");
+        
+        if (validAnswers.length === questions.length) {
+          // Calculate performance metrics
+          const metrics = calculatePerformanceMetrics(allFeedback);
+          setOverallScore(metrics.overallScore);
+          setConfidenceLevel(metrics.confidenceLevel);
+          setPerformanceRating(metrics.performanceRating);
+          
+          console.log("Generating final summary with:", {
+            answers: validAnswers,
+            questions: questions,
+            feedback: allFeedback
+          });
+          
+          const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/generate-summary`, {
+            answers: validAnswers,
+            questions: questions // Send questions for context
+          });
+          
+          console.log("Final summary response:", res.data);
+          setFinalSummary(res.data.summary);
+        } else {
+          console.log("Not all questions answered yet:", validAnswers.length, "of", questions.length);
+        }
       } catch (error) {
         console.error("Failed to get final summary", error);
+        console.error("Error details:", {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
+        
+        if (error.response?.status === 400) {
+          setFinalSummary("Invalid data provided for summary generation.");
+        } else if (error.response?.status === 500) {
+          setFinalSummary("Server error occurred while generating summary.");
+        } else if (error.code === 'NETWORK_ERROR') {
+          setFinalSummary("Network error. Please check your connection.");
+        } else {
+          setFinalSummary("Unable to generate final summary. Please try again.");
+        }
       }
     }
   };
   fetchFinalSummary();
-}, [currentQuestion, showFeedback, allAnswers]);
+}, [questions ,currentQuestion, showFeedback, allAnswers, allFeedback, questions.length]);
+
+
 
 
   // Job Form Screen
@@ -306,9 +503,35 @@ const fetchAIResponseFeedback = async (text) => {
 
         {/* Progress Indicator */}
         <div className="text-center space-y-2 animate-fade-in">
-          <p className=" text-gray-500 text-sm">
-            Question {currentQuestion + 1} of {questions.length}
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <p className=" text-gray-500 text-sm">
+              Question {currentQuestion + 1} of {questions.length}
+            </p>
+            {speechSupported && (
+              <Button
+                onClick={() => {
+                  const newState = !textToSpeechEnabled;
+                  setTextToSpeechEnabled(newState);
+                  
+                  // If turning off speech, cancel any current speech
+                  if (!newState && window.speechSynthesis) {
+                    speechSynthesis.cancel();
+                  }
+                }}
+                variant="ghost"
+                size="sm"
+                className={`hover:text-gray-300 ${
+                  textToSpeechEnabled ? 'text-green-400' : 'text-gray-400'
+                }`}
+              >
+                {textToSpeechEnabled ? (
+                  <Volume2 className="w-4 h-4" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
+              </Button>
+            )}
+          </div>
           <div className="w-full bg-gray-800  rounded-full h-2">
             <div 
               className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
@@ -368,7 +591,7 @@ const fetchAIResponseFeedback = async (text) => {
                 <div className="bg-gray-800 /50 backdrop-blur-sm rounded-xl p-4 border border-gray-700">
                   <p className="text-gray-400 leading-relaxed">{userAnswer}</p>
                 </div>
-              </div>
+              </div> 
             )}
           </div>
         </Card>
@@ -417,32 +640,43 @@ const fetchAIResponseFeedback = async (text) => {
         )}
 
         {/* Final Summary Panel */}
-        {showFeedback && currentQuestion === questions.length - 1 && (
+        {showFeedback && currentQuestion === questions.length - 1 && allAnswers.length >= questions.length && (
           <Card className="glassmorphic p-8 card-glow animate-scale-in">
             <div className="text-center space-y-6">
               <h3 className="text-2xl font-bold text-gray-400">Interview Complete! 🎉</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-green-500">4.0</div>
+                  <div className="text-3xl font-bold text-green-500">{overallScore.toFixed(1)}</div>
                   <div className="text-sm  text-gray-500">Overall Score</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-blue-500">85%</div>
+                  <div className="text-3xl font-bold text-blue-500">{confidenceLevel}%</div>
                   <div className="text-sm  text-gray-500">Confidence Level</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold border-yellow-500">Good</div>
+                  <div className={`text-3xl font-bold ${
+                    performanceRating === "Excellent" ? "text-green-500" :
+                    performanceRating === "Good" ? "text-blue-500" :
+                    performanceRating === "Average" ? "text-yellow-500" :
+                    performanceRating === "Needs Improvement" ? "text-orange-500" :
+                    "text-red-500"
+                  }`}>{performanceRating}</div>
                   <div className="text-sm  text-gray-500">Performance</div>
                 </div>
               </div>
-              {finalSummary && finalSummary.trim() != "" ?(
-  <p className="text-gray-400 leading-relaxed whitespace-pre-wrap max-w-md mx-auto">
-    {finalSummary}
-  </p>
-) : (
-  <p className="text-gray-500">Generating final summary...</p>
-)}
-
+              {finalSummary && finalSummary.trim() !== "" ? (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-gray-400">Final Performance Summary</h4>
+                  <p className="text-gray-400 leading-relaxed whitespace-pre-wrap max-w-2xl mx-auto text-left">
+                    {finalSummary}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-gray-400">Final Performance Summary</h4>
+                  <p className="text-gray-500">Generating comprehensive summary...</p>
+                </div>
+              )}
             </div>
           </Card>
         )}

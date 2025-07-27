@@ -290,9 +290,9 @@ const skillSuggestions = [
 
 
   return (
-    <div className="space-y-6 h-auto w-full animate-fade-in">
+    <div className="space-y-6 overflow-x-hidden w-full  h-auto animate-fade-in">
       {/* Personal Details */}
-      <Card className="glassmorphic card-glow border-0 rounded-2xl">
+      <Card className="glassmorphic overflow-x-hidden w-full card-glow border-0 rounded-2xl">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-200  tracking-wide">
             👤 Personal Details
@@ -306,11 +306,12 @@ const skillSuggestions = [
             </Label>
             <Input
               value={formData.name}
+              autoComplete="on"
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
               placeholder="Enter your full name"
-              className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
+              className="glassmorphic w-full text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
             />
           </div>
 
@@ -326,7 +327,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, email: e.target.value })
                 }
                 placeholder="your.email@example.com"
-                className="glassmorphic text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
+                className="glassmorphic w-full text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
               />
             </div>
             <div>
@@ -339,7 +340,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, phone: e.target.value })
                 }
                 placeholder="+91 8500110011"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
+                className="glassmorphic w-full  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-400"
               />
             </div>
           </div>
@@ -355,7 +356,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, jobTitle: e.target.value })
                 }
                 placeholder="e.g. Frontend Developer"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                className="glassmorphic w-full text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
               />
             </div>
             <div>
@@ -368,7 +369,7 @@ const skillSuggestions = [
                   setFormData({ ...formData, location: e.target.value })
                 }
                 placeholder="City, Country"
-                className="glassmorphic  text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                className="glassmorphic w-full text-gray-900 dark:text-gray-200  placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
               />
             </div>
           </div>

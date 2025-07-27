@@ -1,8 +1,154 @@
 
 
 @import "tailwindcss";
-      
 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+
+
+/* ResumeForm specific autocomplete prevention */
+.resumeBuilder input, 
+.resumeBuilder textarea, 
+.resumeBuilder select {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex-shrink: 1 !important;
+  overflow: hidden !important;
+}
+
+/* ResumeForm specific autocomplete prevention */
+.resumeBuilder input:-webkit-autofill,
+.resumeBuilder input:-webkit-autofill:hover,
+.resumeBuilder input:-webkit-autofill:focus,
+.resumeBuilder input:-webkit-autofill:active {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex-shrink: 1 !important;
+  overflow: hidden !important;
+}
+
+/* ResumeForm mobile-specific autocomplete prevention */
+@media (max-width: 768px) {
+  .resumeBuilder input, 
+  .resumeBuilder textarea, 
+  .resumeBuilder select {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+  
+  .resumeBuilder input:-webkit-autofill,
+  .resumeBuilder input:-webkit-autofill:hover,
+  .resumeBuilder input:-webkit-autofill:focus,
+  .resumeBuilder input:-webkit-autofill:active {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+}
+
+/* ResumeForm extra small mobile devices */
+@media (max-width: 480px) {
+  .resumeBuilder input, 
+  .resumeBuilder textarea, 
+  .resumeBuilder select {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+  
+  .resumeBuilder input:-webkit-autofill,
+  .resumeBuilder input:-webkit-autofill:hover,
+  .resumeBuilder input:-webkit-autofill:focus,
+  .resumeBuilder input:-webkit-autofill:active {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    font-size: 16px !important;
+  }
+}
+
+      
 
 /* Scrollbar and print custom styles */
 textarea::-webkit-scrollbar {
@@ -220,7 +366,7 @@ textarea {
 
 
 }
-@media (max-width: 360px) {
+@media (max-width: 365px) {
   .logoutButton{
     margin-left: 100px;
 
@@ -248,10 +394,111 @@ textarea {
     box-shadow: 0 4px 30px rgba(0,0,0,0.3),  0 0px 20px rgba(87, 141, 202, 0.4)
   }
 
-   .resumeBuilder{
+ .resumeBuilder{
     position: relative;
     right: 19px;
     padding: 10px;
   
  }
+
+}
+
+/* ResumeForm specific autocomplete dropdown prevention */
+.resumeBuilder input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+/* ResumeForm specific container controls */
+.resumeBuilder .input-container, 
+.resumeBuilder .glassmorphic {
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+/* ResumeForm specific mobile fixes */
+@media (max-width: 480px) {
+  .resumeBuilder .glassmorphic input,
+  .resumeBuilder .glassmorphic textarea,
+  .resumeBuilder .glassmorphic select {
+    position: relative !important;
+    z-index: 1 !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+  
+  /* ResumeForm specific focus prevention */
+  .resumeBuilder input:focus,
+  .resumeBuilder textarea:focus,
+  .resumeBuilder select:focus {
+    transform: none !important;
+    -webkit-transform: none !important;
+    scale: 1 !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+  }
+  
+  /* ResumeForm specific container bounds */
+  .resumeBuilder .glassmorphic {
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ResumeForm ultra-specific mobile fix for 400px and below */
+@media (max-width: 400px) {
+  .resumeBuilder input, 
+  .resumeBuilder textarea, 
+  .resumeBuilder select {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    font-size: 16px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  .resumeBuilder input:-webkit-autofill,
+  .resumeBuilder input:-webkit-autofill:hover,
+  .resumeBuilder input:-webkit-autofill:focus,
+  .resumeBuilder input:-webkit-autofill:active {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    overflow: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    font-size: 16px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  /* ResumeForm specific container maintenance */
+  .resumeBuilder .glassmorphic, 
+  .resumeBuilder .input-container, 
+  .resumeBuilder [class*="glassmorphic"] {
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
 }

@@ -143,9 +143,9 @@ export const generateFeedback = async (req, res) => {
 Act like an AI interview coach. Analyze this answer: "${answer}".
 Evaluate it in the following 3 categories:
 
-1. **Confidence** – How confident and clear does the candidate sound?
-2. **Clarity** – Is the answer well-structured and easy to understand?
-3. **Relevance** – Does it address the interview question directly?
+1. **Confidence** – How confident and clear does the candidate sound? (1-5)
+2. **Clarity** – Is the answer well-structured and easy to understand? (1-5)
+3. **Relevance** – Does it address the interview question directly? (1-5)
 
 Return a JSON array with this format:
 
@@ -157,10 +157,23 @@ Return a JSON array with this format:
     "feedback": "Your voice was steady, but avoid fillers like 'um'.",
     "color": "warning"
   },
-  ...
+  {
+    "category": "Clarity", 
+    "score": 4,
+    "maxScore": 5,
+    "feedback": "Well-structured response with clear points.",
+    "color": "success"
+  },
+  {
+    "category": "Relevance",
+    "score": 3,
+    "maxScore": 5,
+    "feedback": "Addresses the question but could be more specific.",
+    "color": "warning"
+  }
 ]
 
-Use score between 1 to 5 and color values: success, warning, or destructive.
+Use score between 1 to 5 and color values: success (4-5), warning (2-3), or destructive (1).
 No extra explanation or formatting – return only valid JSON array.
 `;
 
@@ -194,28 +207,48 @@ No extra explanation or formatting – return only valid JSON array.
 
 export const generateFinalSummary = async (req, res) => {
   try {
-    const { answers } = req.body;
+    console.log("generateFinalSummary called with:", req.body);
+    const { answers, questions } = req.body;
 
     if (!answers || !Array.isArray(answers) || answers.length === 0) {
+      console.log("Invalid answers:", answers);
       return res.status(400).json({ error: "Answers array is required." });
     }
 
-    const combinedAnswers = answers.map((a, i) => `Q${i + 1} Answer: ${a}`).join("\n");
+    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+      console.log("Invalid questions:", questions);
+      return res.status(400).json({ error: "Questions array is required." });
+    }
+
+    // Create a detailed context with both questions and answers
+    const qaPairs = answers.map((answer, i) => {
+      const question = questions[i] || `Question ${i + 1}`;
+      return `Q${i + 1}: ${question}\nAnswer: ${answer}`;
+    }).join("\n\n");
 
     const prompt = `
-You are an AI interview coach. Here's a candidate's response to 5 interview questions:
+You are an AI interview coach analyzing a complete mock interview. Here are the questions and the candidate's responses:
 
-${combinedAnswers}
+${qaPairs}
 
-Based on this, write a final performance summary. Cover:
-- Overall communication style
-- Relevance of answers
-- Clarity and confidence
-- Suggestions for improvement
+Based on this complete interview, provide a comprehensive final performance summary. Evaluate:
 
-Keep it short, professional, and in paragraph form (max 5 lines). Do not include "The candidate..." or "Overall..." just provide the summary directly.
+1. **Communication Effectiveness**: How well did they articulate their thoughts?
+2. **Answer Quality**: Were responses relevant, detailed, and well-structured?
+3. **Confidence Level**: Did they sound confident and professional?
+4. **Technical Knowledge**: How well did they demonstrate their skills?
+5. **Areas for Improvement**: What specific aspects could they work on?
+
+Write a professional, constructive summary (3-4 sentences) that provides actionable feedback. Be specific about strengths and areas for growth. Do not use phrases like "The candidate..." or "Overall..." - write directly and professionally.
 `;
 
+    console.log("Sending request to OpenRouter with prompt:", prompt);
+    
+    if (!process.env.OPENROUTER_API_KEY) {
+      console.error("OPENROUTER_API_KEY is not set");
+      return res.status(500).json({ error: "AI service configuration error." });
+    }
+    
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -234,10 +267,22 @@ Keep it short, professional, and in paragraph form (max 5 lines). Do not include
       }
     );
 
+    console.log("OpenRouter response:", response.data);
     const summary = response.data.choices[0].message.content.trim();
+    console.log("Generated summary:", summary);
     res.json({ summary });
   } catch (error) {
     console.error("Final Summary Gen Error:", error?.response?.data || error.message);
-    res.status(500).json({ error: "Failed to generate final interview summary." });
+    console.error("Full error object:", error);
+    
+    if (error.response?.status === 401) {
+      res.status(500).json({ error: "API key error. Please check OpenRouter configuration." });
+    } else if (error.response?.status === 429) {
+      res.status(500).json({ error: "Rate limit exceeded. Please try again later." });
+    } else if (error.code === 'ENOTFOUND') {
+      res.status(500).json({ error: "Network error. Unable to reach AI service." });
+    } else {
+      res.status(500).json({ error: "Failed to generate final interview summary." });
+    }
   }
 };

@@ -13,7 +13,7 @@ router.post("/transcribe-audio", upload.single("audio"), transcribeAudio);
 
 router.post("/generate-feedback", generateFeedback)
 
-router.post("/generate-summary", generateFeedback)
+router.post("/generate-summary", generateFinalSummary)
 
 
 module.exports = router;

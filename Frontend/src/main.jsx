@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './lovable.css';
+import './App.css';
 import './index.css'
 import App from './App.jsx'
 import 'remixicon/fonts/remixicon.css'
