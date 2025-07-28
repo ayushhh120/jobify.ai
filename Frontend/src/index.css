@@ -400,6 +400,9 @@ textarea {
     padding: 10px;
   
  }
+ .generateWithAI{
+  color: rgb(20, 130, 255);
+ }
 
 }
 

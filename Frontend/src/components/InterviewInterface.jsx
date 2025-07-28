@@ -521,7 +521,7 @@ const fetchAIResponseFeedback = async (text) => {
                 variant="ghost"
                 size="sm"
                 className={`hover:text-gray-300 ${
-                  textToSpeechEnabled ? 'text-green-400' : 'text-gray-400'
+                  textToSpeechEnabled ? 'text-blue-400' : 'text-gray-400'
                 }`}
               >
                 {textToSpeechEnabled ? (

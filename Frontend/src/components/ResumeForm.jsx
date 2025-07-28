@@ -147,7 +147,9 @@ const skillSuggestions = [
   "Notion",  
   "Jira",  
   "Postman",  
-  "Visual Studio Code",  
+  "Visual Studio Code", 
+  "CRM",
+   
 ];
 
 
@@ -479,7 +481,7 @@ const skillSuggestions = [
             />
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-400">
+                <div className=" flex items-center gap-2 text-blue-400">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span className="text-sm">Generating with AI...</span>
                 </div>
